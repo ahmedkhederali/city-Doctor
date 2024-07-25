@@ -10,6 +10,7 @@ import mokhImage from "../../assets/mokh.jfif";
 import anfImage from "../../assets/anf.jfif";
 import nsaImage from "../../assets/nsa.jfif";
 
+import "./slider.css"
 // Slider settings
 const settings = {
   dots: false,
@@ -31,9 +32,9 @@ const settings = {
     {
       breakpoint: 600,
       settings: {
-        slidesToShow: 2,
-        slidesToScroll: 2,
-        initialSlide: 2
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        initialSlide: 1
       }
     },
     {
@@ -63,7 +64,7 @@ function Responsive() {
       <Slider {...settings}>
         {slides.map((slide) => (
           <Box key={slide.id} sx={{ padding: 2 }}>
-            <Card sx={{ height: 270, width: 365, display: 'flex', flexDirection: 'column', cursor:'pointer' }}>
+            <Card sx={{ height: 270, width: '100%', display: 'flex', flexDirection: 'column', cursor:'pointer' }}>
               <CardMedia
                 component="img"
                 height="85%"

@@ -1,0 +1,30 @@
+/* Responsive.css */
+
+.slider-container {
+    overflow: hidden; /* Hide horizontal scroll */
+    width: 100%; /* Ensure the container spans the full width */
+    padding: 0 16px; /* Optional: Add some padding for better appearance */
+    box-sizing: border-box; /* Ensure padding is included in the width calculation */
+  }
+  /* slider.css */
+
+.slider-container {
+    overflow: hidden; /* Prevent horizontal scroll */
+    width: 100%; /* Full width of the container */
+    padding: 0 16px; /* Adjust padding if necessary */
+    box-sizing: border-box; /* Include padding in width */
+  }
+  
+  .slick-slide {
+    display: flex;
+    justify-content: center; /* Center slides within the container */
+  }
+  
+  .slick-track {
+    display: flex; /* Ensure slides are in a row */
+  }
+  
+  .slick-list {
+    overflow: hidden; /* Prevent scroll */
+  }
+  

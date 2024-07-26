@@ -5,19 +5,16 @@ import PropTypes from 'prop-types';
 const AppContext = createContext();
 
 const AppProvider = ({ children }) => {
-  const [state, setState] = useState(false);
-
-
+  const [drawerFWidth, setDrawerFWidth] = useState(240);
   return (
-    <AppContext.Provider value={{ state, setState }}>
+    <AppContext.Provider value={{ drawerFWidth, setDrawerFWidth }}>
       {children}
     </AppContext.Provider>
   );
 };
 
-// Adding PropTypes for validation
 AppProvider.propTypes = {
-    children: PropTypes.node.isRequired,
-  };
-  
-  export { AppContext, AppProvider };
+  children: PropTypes.node.isRequired,
+};
+
+export { AppContext, AppProvider };

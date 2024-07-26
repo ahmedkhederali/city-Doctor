@@ -1,3 +1,4 @@
+// src/components/PersistentDrawerLeft.js
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -5,7 +6,6 @@ import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -21,6 +22,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Hero from '../Hero/Hero';
+import { AppContext } from '../../contextApi/AppContext';
 
 const drawerWidth = 240;
 const miniDrawerWidth = 60;
@@ -28,7 +30,6 @@ const miniDrawerWidth = 60;
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     flexGrow: 1,
-    // padding: theme.spacing(3),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -38,7 +39,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
       }),
-    //   marginLeft: `${drawerWidth - miniDrawerWidth}px`,
     }),
   }),
 );
@@ -84,6 +84,7 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [open, setOpen] = React.useState(!isMobile);
+  const { drawerFWidth, setDrawerFWidth } = React.useContext(AppContext);
 
   React.useEffect(() => {
     setOpen(!isMobile);
@@ -91,11 +92,16 @@ export default function PersistentDrawerLeft() {
 
   const handleDrawerToggle = () => {
     if (!isMobile) {
+      if(open){
+        setDrawerFWidth(miniDrawerWidth)
+      }else{
+        setDrawerFWidth(drawerWidth)
+      }
       setOpen(!open);
     } else {
       setOpen(true);
     }
-  };
+    };
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -129,8 +135,12 @@ export default function PersistentDrawerLeft() {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             سرس الليان
           </Typography>
-          <Button variant="h5" sx={{ fontWeight: 'bold' }} color="inherit">تسجيل الدخول</Button>
-          <Button variant="h5"  sx={{ fontWeight: 'bold' }} color="inherit">انشاء حساب</Button>
+          <Button variant="h5" sx={{ fontWeight: 'bold' }} color="inherit">
+            تسجيل الدخول
+          </Button>
+          <Button variant="h5" sx={{ fontWeight: 'bold' }} color="inherit">
+            انشاء حساب
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -174,12 +184,9 @@ export default function PersistentDrawerLeft() {
           ))}
         </List>
         <Divider />
-        {/* Add additional items or components here if needed */}
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        <Hero/>
-
       </Main>
     </Box>
   );

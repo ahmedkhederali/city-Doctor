@@ -18,12 +18,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Hero from '../Hero/Hero';
 import { AppContext } from '../../contextApi/AppContext';
-
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
+import BiotechIcon from '@mui/icons-material/Biotech';
 const drawerWidth = 240;
 const miniDrawerWidth = 60;
 
@@ -102,7 +101,11 @@ export default function PersistentDrawerLeft() {
       setOpen(true);
     }
     };
-
+    const drawerItems = [
+      { text: 'الأطباء', icon: <LocalHospitalIcon /> },
+      { text: 'الصيدليات', icon: <LocalPharmacyIcon /> },
+      { text: 'المعامل', icon: <BiotechIcon /> },
+    ];
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -151,6 +154,7 @@ export default function PersistentDrawerLeft() {
             width: open ? drawerWidth : miniDrawerWidth,
             boxSizing: 'border-box',
             overflowX: 'hidden',
+            backgroundColor: "#0070cd",
             transition: theme.transitions.create('width', {
               easing: theme.transitions.easing.sharp,
               duration: theme.transitions.duration.enteringScreen,
@@ -170,20 +174,39 @@ export default function PersistentDrawerLeft() {
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
-        <Divider />
+        <Divider sx={{ borderColor: 'white' }}/>
         <List>
-          {['الدكاتره', 'الصيادلة', 'الحضانات', 'فقط'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+        {drawerItems.map((item, index) => (
+            <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                  color: 'white', // Ensure text is white
+                  // '&:hover': {
+                  //   backgroundColor: '#000', // Change hover background color
+                  // },
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                    color: 'white', // Ensure icons are white
+                   
+                  }}
+                >
+                  {item.icon}
                 </ListItemIcon>
-                {open && <ListItemText primary={text} />}
+                <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
-        <Divider />
+        <Divider sx={{ borderColor: 'white' }}/>
+
       </Drawer>
       <Main open={open}>
         <DrawerHeader />

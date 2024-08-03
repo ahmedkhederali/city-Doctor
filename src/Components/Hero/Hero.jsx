@@ -11,7 +11,7 @@ export default function Hero() {
       id="hero"
       sx={(theme) => ({
         width: "100%",
-        height: "50vh", // Full viewport height
+        height: "50vh", // Half viewport height
         position: "relative",
         backgroundImage: `url(${heroImage})`,
         backgroundSize: "cover",
@@ -52,23 +52,14 @@ export default function Hero() {
               flexDirection: { xs: "column", md: "row" },
               alignSelf: "center",
               textAlign: "center",
-              fontSize: "clamp(3.5rem, 10vw, 4rem)",
+              fontSize: "clamp(3rem, 5vw, 4rem)",
               color: "white", // Text color to stand out against the overlay
             }}
           >
-            اهتم &nbsp;
-            <Typography
-              component="span"
-              variant="h1"
-              sx={{
-                fontSize: "clamp(3rem, 10vw, 4rem)",
-                color: "white", // Ensure text color remains white
-              }}
-            >
-              بصحتك
-            </Typography>
+            أهتم بصحتك 
           </Typography>
           <Typography
+            variant="h5"
             textAlign="center"
             color="white" // Text color to stand out against the overlay
             sx={{ alignSelf: "center", width: { sm: "100%", md: "80%" } }}

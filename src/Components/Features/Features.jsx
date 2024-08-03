@@ -1,3 +1,4 @@
+// src/components/Features/Features.js
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -18,14 +19,14 @@ import labImage from "../../assets/lab.webp"; // Adjust the path
 const items = [
   {
     icon: <LocalHospitalIcon />,
-    title: 'عرض جميع الأطباء',
+    title: 'الأطباء',
     description: 'يمكنك استعراض جميع الأطباء المتاحين في المدينة والحصول على تفاصيل التواصل معهم ومواقعهم.',
     imageLight: `url(${DocImage})`,
     imageDark: `url(${DocImage})`,
   },
   {
     icon: <LocalPharmacyIcon />,
-    title: 'عرض جميع الصيدليات',
+    title: 'الصيدليات',
     description: 'يمكنك العثور على جميع الصيدليات في المدينة، ومعرفة أوقات العمل والموقع.',
     imageLight: `url(${pharmacyImage})`,
     imageDark: `url(${pharmacyImage})`,
@@ -67,6 +68,7 @@ export default function Features() {
               label={title}
               onClick={() => handleItemClick(index)}
               sx={{
+                lineHeight:"2rem",
                 borderColor: (theme) => {
                   if (theme.palette.mode === 'light') {
                     return selectedItemIndex === index ? 'primary.light' : '';
@@ -109,8 +111,8 @@ export default function Features() {
               minHeight: 280,
             }}
           />
-          <Box sx={{ px: 2, pb: 2 }}>
-            <Typography color="text.primary" variant="body2" fontWeight="bold">
+          <Box sx={{ px: 2, pb: 2}}>
+            <Typography color="text.primary" variant="body2" fontWeight="bold" >
               {selectedFeature.title}
             </Typography>
             <Typography color="text.secondary" variant="body2" sx={{ my: 0.5 }}>

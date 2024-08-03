@@ -8,6 +8,7 @@ import Hero from "./Components/Hero/Hero";
 import Box from "@mui/material/Box";
 import { AppContext } from "./contextApi/AppContext";
 import Features from "./Components/Features/Features";
+import { CopyRights } from "./Components/Footer/Footer";
 
 export default function App() {
   const {drawerFWidth, setDrawerFWidth}=useContext(AppContext);
@@ -24,6 +25,7 @@ export default function App() {
         <Responsive />
         <HeroTitle title={"مميزات الموقع"} />
         <Features/>
+        <CopyRights/>
       </Box>
     </>
   );

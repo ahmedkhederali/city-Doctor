@@ -39,7 +39,7 @@
   
   /* RTL specific styles */
   [dir="rtl"] .hero-title.MuiTypography-root {
-    letter-spacing: 5px !important;
+    /* letter-spacing: 5px !important; */
     line-height: 1.5;
   }
   

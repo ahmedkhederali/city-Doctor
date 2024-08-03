@@ -14,8 +14,10 @@ import "./slider.css"
 // Slider settings
 const settings = {
   dots: false,
-  infinite: false,
+  infinite: true,
+  autoplay: true,
   speed: 500,
+  autoplaySpeed: 3000,
   slidesToShow: 4,
   slidesToScroll: 4,
   initialSlide: 0,

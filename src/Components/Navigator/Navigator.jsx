@@ -147,7 +147,7 @@ export default function PersistentDrawerLeft() {
           </Button>
           <Button 
            component={RouterLink}
-           variant="h5" to='/singup' sx={{ fontWeight: 'bold' }} color="inherit">
+           variant="h5" to='/signup' sx={{ fontWeight: 'bold' }} color="inherit">
             انشاء حساب
           </Button>
         </Toolbar>

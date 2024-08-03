@@ -83,7 +83,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function PersistentDrawerLeft() {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery('(max-width:767px)');
   const [open, setOpen] = React.useState(!isMobile);
   const { drawerFWidth, setDrawerFWidth } = React.useContext(AppContext);
 
@@ -132,7 +132,7 @@ export default function PersistentDrawerLeft() {
               aria-label="open drawer"
               onClick={handleDrawerToggle}
               edge="start"
-              sx={{ mr: 2, ...(open && { display: 'none' }) }}
+              sx={{ mr: 0, ...(open && { display: 'none' }) }}
             >
               <MenuIcon />
             </IconButton>

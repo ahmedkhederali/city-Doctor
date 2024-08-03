@@ -1,32 +1,27 @@
-import React, { useContext } from "react";
-import PersistentDrawerLeft from "./Components/Navigator/Navigator";
-import Responsive from "./Components/Slider/Sliders";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { HeroTitle } from "./Common/Heading/Heading";
-import Hero from "./Components/Hero/Hero";
-import Box from "@mui/material/Box";
-import { AppContext } from "./contextApi/AppContext";
-import Features from "./Components/Features/Features";
-import { CopyRights } from "./Components/Footer/Footer";
+// App.js
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import HomePage from './Components/Home/Home';
+import SignIn from './Components/Login/LoginForm';
+import SignUp from './Components/SignUp/SignUp';
+import Layout from './Common/Layout/Layout' // Adjust the path according to your project structure
+import ForgetPassword from './Components/ForgetPassword/ForgetPassword';
 
-export default function App() {
-  const {drawerFWidth, setDrawerFWidth}=useContext(AppContext);
+const App = () => {
   return (
-    <>
-      <PersistentDrawerLeft />
-      <Box   sx={{
-          marginLeft: { xs: 0, sm: `${drawerFWidth-10}px` },
-          padding: 2,
-          transition: 'margin 0.3s ease-out',
-        }}>
-        <Hero />
-        <HeroTitle title={"احجز كشف حسب التخصص"} />
-        <Responsive />
-        <HeroTitle title={"مميزات الموقع"} />
-        <Features/>
-        <CopyRights/>
-      </Box>
-    </>
+    <Router>
+      <Routes>
+      <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          {/* Add other routes here that should include header and footer */}
+        </Route>
+        <Route path="/login" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/forget_password" element={<ForgetPassword/>} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
   );
-}
+};
+
+export default App;

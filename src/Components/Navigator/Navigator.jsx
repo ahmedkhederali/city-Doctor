@@ -23,6 +23,8 @@ import { AppContext } from '../../contextApi/AppContext';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
 import BiotechIcon from '@mui/icons-material/Biotech';
+import { Outlet, Link as RouterLink } from 'react-router-dom';
+
 const drawerWidth = 240;
 const miniDrawerWidth = 60;
 
@@ -138,10 +140,14 @@ export default function PersistentDrawerLeft() {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             سرس الليان
           </Typography>
-          <Button variant="h5" sx={{ fontWeight: 'bold' }} color="inherit">
+          <Button 
+          component={RouterLink}
+          variant="h5" to='/login' sx={{ fontWeight: 'bold' }} color="inherit">
             تسجيل الدخول
           </Button>
-          <Button variant="h5" sx={{ fontWeight: 'bold' }} color="inherit">
+          <Button 
+           component={RouterLink}
+           variant="h5" to='/singup' sx={{ fontWeight: 'bold' }} color="inherit">
             انشاء حساب
           </Button>
         </Toolbar>

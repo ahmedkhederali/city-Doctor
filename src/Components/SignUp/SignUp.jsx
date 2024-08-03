@@ -5,7 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
+import { Link, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -13,8 +13,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Form, Field } from 'react-final-form';
 import { signupSchema } from '../../Services/Validation/validationSchema'; // Import the Zod schema
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import ArrowBackIcon
 
 export default function SignUp() {
+  const navigate = useNavigate(); // Initialize useNavigate
+
   const onSubmit = async (values) => {
     console.log(values);
   };
@@ -30,6 +33,13 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
+          <Button
+            onClick={() => navigate(-1)}
+            startIcon={<ArrowBackIcon />}
+            sx={{ alignSelf: 'flex-start' }}
+          >
+            العوده للخلف
+          </Button>
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -147,7 +157,7 @@ export default function SignUp() {
                 </Button>
                 <Grid container>
                   <Grid item xs>
-                    <Link href="#" variant="body2">
+                  <Link to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>
                       {"هل لديك حساب؟ تسجيل الدخول"}
                     </Link>
                   </Grid>

@@ -3,7 +3,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
+import { Link, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -11,11 +11,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Form, Field } from 'react-final-form';
 import { forgetPasswordSchema } from '../../Services/Validation/validationSchema'; // Import the Zod schema
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import ArrowBackIcon
 
 export default function ForgetPassword() {
   const onSubmit = async (values) => {
     console.log(values);
   };
+  const navigate = useNavigate(); // Initialize useNavigate
 
   return (
       <Container component="main" maxWidth="xs">
@@ -28,6 +30,13 @@ export default function ForgetPassword() {
             alignItems: 'center',
           }}
         >
+           <Button
+            onClick={() => navigate(-1)}
+            startIcon={<ArrowBackIcon />}
+            sx={{ alignSelf: 'flex-start' }}
+          >
+            العوده للخلف
+          </Button>
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -77,8 +86,8 @@ export default function ForgetPassword() {
                 </Button>
                 <Grid container>
                   <Grid item>
-                    <Link href="#" variant="body2">
-                      {"تذكرت كلمة المرور؟ تسجيل الدخول"}
+                    <Link to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>
+                        {"تذكرت كلمة المرور؟ تسجيل الدخول"}
                     </Link>
                   </Grid>
                 </Grid>

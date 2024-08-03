@@ -76,7 +76,7 @@ const AppBar = styled(MuiAppBar, {
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-  padding: theme.spacing(0, 1),
+  padding: theme.spacing(0, 0),
   ...theme.mixins.toolbar,
   justifyContent: 'flex-end',
 }));
@@ -137,7 +137,7 @@ export default function PersistentDrawerLeft() {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+          <Typography  noWrap component="div" sx={{ flexGrow: 1 }}>
             سرس الليان
           </Typography>
           <Button 

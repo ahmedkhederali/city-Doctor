@@ -1,4 +1,3 @@
-// src/components/PersistentDrawerLeft.js
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -103,11 +102,13 @@ export default function PersistentDrawerLeft() {
       setOpen(true);
     }
     };
-    const drawerItems = [
-      { text: 'الأطباء', icon: <LocalHospitalIcon /> },
-      { text: 'الصيدليات', icon: <LocalPharmacyIcon /> },
-      { text: 'المعامل', icon: <BiotechIcon /> },
-    ];
+
+  const drawerItems = [
+    { text: 'الأطباء', icon: <LocalHospitalIcon />, link: '/doctors' },
+    { text: 'الصيدليات', icon: <LocalPharmacyIcon />, link: '/pharmacies' },
+    { text: 'المعامل', icon: <BiotechIcon />, link: '/medical-labs' },
+  ];
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -137,7 +138,7 @@ export default function PersistentDrawerLeft() {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography  noWrap component="div" sx={{ flexGrow: 1 }}>
+          <Typography noWrap component="div" sx={{ flexGrow: 1 }}>
             سرس الليان
           </Typography>
           <Button 
@@ -182,17 +183,16 @@ export default function PersistentDrawerLeft() {
         </DrawerHeader>
         <Divider sx={{ borderColor: 'white' }}/>
         <List>
-        {drawerItems.map((item, index) => (
+          {drawerItems.map((item) => (
             <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
+                component={RouterLink}
+                to={item.link}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
                   color: 'white', // Ensure text is white
-                  // '&:hover': {
-                  //   backgroundColor: '#000', // Change hover background color
-                  // },
                 }}
               >
                 <ListItemIcon
@@ -201,7 +201,6 @@ export default function PersistentDrawerLeft() {
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
                     color: 'white', // Ensure icons are white
-                   
                   }}
                 >
                   {item.icon}

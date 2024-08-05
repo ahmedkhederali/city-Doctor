@@ -11,16 +11,17 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import createCache from "@emotion/cache";
 import { prefixer } from "stylis";
 import rtlPlugin from "stylis-plugin-rtl";
-import { CacheProvider } from '@emotion/react';
+import { CacheProvider } from "@emotion/react";
 import { AppProvider } from "./contextApi/AppContext";
-
+import { store } from "./redux/store";
+import { Provider } from "react-redux";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 // Define the theme with the direction set to RTL
 const theme = createTheme({
   direction: "rtl",
   palette: {
-    mode: 'light', // or 'dark' depending on your preference
+    mode: "light", // or 'dark' depending on your preference
   },
 });
 
@@ -32,9 +33,11 @@ const cacheRtl = createCache({
 root.render(
   <CacheProvider value={cacheRtl}>
     <ThemeProvider theme={theme}>
-    <AppProvider>
-      <App />
-      </AppProvider>
+      <Provider store={store}>
+        <AppProvider store={store}>
+          <App />
+        </AppProvider>
+      </Provider>
     </ThemeProvider>
   </CacheProvider>
 );

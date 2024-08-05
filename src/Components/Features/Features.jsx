@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
@@ -23,6 +23,7 @@ const items = [
     description: 'يمكنك استعراض جميع الأطباء المتاحين في المدينة والحصول على تفاصيل التواصل معهم ومواقعهم.',
     imageLight: `url(${DocImage})`,
     imageDark: `url(${DocImage})`,
+    link:"/doctors"
   },
   {
     icon: <LocalPharmacyIcon />,
@@ -30,6 +31,7 @@ const items = [
     description: 'يمكنك العثور على جميع الصيدليات في المدينة، ومعرفة أوقات العمل والموقع.',
     imageLight: `url(${pharmacyImage})`,
     imageDark: `url(${pharmacyImage})`,
+    link:"/pharmacies"
   },
   {
     icon: <BiotechIcon />,
@@ -37,6 +39,7 @@ const items = [
     description: 'يمكنك العثور على جميع معامل التحاليل الطبية ومراكز الأشعة في المدينة.',
     imageLight: `url(${labImage})`,
     imageDark: `url(${labImage})`,
+    link:"/medical-labs"
   },
 ];
 
@@ -122,6 +125,7 @@ export default function Features() {
               color="primary"
               variant="body2"
               fontWeight="bold"
+              to={selectedFeature.link}
               sx={{
                 display: 'inline-flex',
                 alignItems: 'center',

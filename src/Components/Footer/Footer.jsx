@@ -1,10 +1,8 @@
-import {  Divider, Stack, Typography } from "@mui/material";
+import { Divider, Stack, Typography } from "@mui/material";
 import React from "react";
 import "./footer.css";
 
-
-
-export const CopyRights= () => {
+export const CopyRights = () => {
   return (
     <Stack className="footer-copy-rights">
       <Divider
@@ -17,7 +15,9 @@ export const CopyRights= () => {
         }}
       />
       <Stack>
-        <Typography className="copy-rights-text">3lolo © Copyright 2024, All Rights Reserved</Typography>
+        <Typography className="copy-rights-text">
+          © حقوق النشر 2024، جميع الحقوق محفوظة
+        </Typography>
         {/* <Box>
           <Typography>Designed By </Typography>
           <Typography> IMMRSV</Typography>

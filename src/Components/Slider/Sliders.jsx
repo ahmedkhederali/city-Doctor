@@ -1,16 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Slider from "react-slick";
-import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
-import gldiaImage from "../../assets/gldia.jfif";
-import asnanImage from "../../assets/asnan.jfif";
-import ezamImage from "../../assets/ezam.jfif";
-import nfsiImage from "../../assets/nfsi.jfif";
-import atfalImage from "../../assets/atfal.jfif";
-import mokhImage from "../../assets/mokh.jfif";
-import anfImage from "../../assets/anf.jfif";
-import nsaImage from "../../assets/nsa.jfif";
+import { Card, CardContent, CardMedia, Typography, Box, CircularProgress } from "@mui/material";
+import image1 from "../../assets/gldia.jfif";
 
+
+import { useDispatch, useSelector } from 'react-redux';
+import {imageMap} from  "../../Common/Helper/helper"
 import "./slider.css"
+import { fetchSpecialties } from "../../redux/Actions/specialActions";
+
 // Slider settings
 const settings = {
   dots: false,
@@ -49,18 +47,31 @@ const settings = {
   ]
 };
 
-// Sample data
-const slides = [
-  { id: 1, title: "جلدية", image: gldiaImage },
-  { id: 2, title: "الأسنان", image: asnanImage },
-  { id: 3, title: "العظام", image: ezamImage },
-  { id: 4, title: "نفسي", image: nfsiImage },
-  { id: 5, title: "نسا وتوليد", image: nsaImage },
-  { id: 7, title: "مخ وأعصاب", image: mokhImage },
-  { id: 8, title: "الأنف والأذن", image: anfImage }
-];
-
 function Responsive() {
+const dispatch = useDispatch();
+const specialties = useSelector((state) => state.yourFeature.items);
+const status = useSelector((state) => state.yourFeature.status);
+const error = useSelector((state) => state.yourFeature.error);
+
+useEffect(() => {
+  if (status === 'idle' || status === undefined) {
+    dispatch(fetchSpecialties());
+  }
+}, [status, dispatch]);
+
+useEffect(() => {
+  if (status === 'failed') {
+    toast.error(`Error: ${error}`);
+  }
+}, [status, error]);
+
+if (status === 'loading') return <CircularProgress/>;
+
+const slides = specialties.map((specialty, index) => ({
+  id: index + 1,
+  title: specialty.specialty_name,  // Replace name with image label based on index
+  image: imageMap[index] || image1 // Default to image1 if index is out of bounds
+}));
   return (
     <div className="slider-container">
       <Slider {...settings}>

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Slider from "react-slick";
 import { Card, CardContent, CardMedia, Typography, Box, CircularProgress } from "@mui/material";
 import image1 from "../../assets/gldia.jfif";
+import { toast } from 'react-toastify';
 
 
 import { useDispatch, useSelector } from 'react-redux';

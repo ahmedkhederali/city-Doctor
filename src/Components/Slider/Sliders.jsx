@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {imageMap} from  "../../Common/Helper/helper"
 import "./slider.css"
 import { fetchSpecialties } from "../../redux/Actions/specialActions";
+import { useNavigate } from "react-router-dom";
 
 // Slider settings
 const settings = {
@@ -53,6 +54,7 @@ const dispatch = useDispatch();
 const specialties = useSelector((state) => state.yourFeature.items);
 const status = useSelector((state) => state.yourFeature.status);
 const error = useSelector((state) => state.yourFeature.error);
+const navigate = useNavigate(); // Initialize useNavigate
 
 useEffect(() => {
   if (status === 'idle' || status === undefined) {
@@ -66,10 +68,14 @@ useEffect(() => {
   }
 }, [status, error]);
 
+const handleCardClick = (id) => {
+  navigate(`/specialties/${id}`); // Navigate to /id when a card is clicked
+};
+
 if (status === 'loading') return <CircularProgress/>;
 
 const slides = specialties.map((specialty, index) => ({
-  id: index + 1,
+  id: specialty._id,
   title: specialty.specialty_name,  // Replace name with image label based on index
   image: imageMap[index] || image1 // Default to image1 if index is out of bounds
 }));
@@ -78,7 +84,9 @@ const slides = specialties.map((specialty, index) => ({
       <Slider {...settings}>
         {slides.map((slide) => (
           <Box key={slide.id} sx={{ padding: 2 }}>
-            <Card sx={{ height: 270, width: '100%', display: 'flex', flexDirection: 'column', cursor:'pointer' }}>
+            <Card 
+            onClick={() => handleCardClick(slide.id)} // Handle click event
+            sx={{ height: 270, width: '100%', display: 'flex', flexDirection: 'column', cursor:'pointer' }}>
               <CardMedia
                 component="img"
                 height="85%"

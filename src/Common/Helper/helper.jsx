@@ -15,3 +15,26 @@ export const imageMap = {
     5: image6,
     6: image7
   };
+
+  // Function to translate days and time
+  export const translateDayAndTime = (day, time) => {
+  const daysMap = {
+    Sunday: "الأحد",
+    Monday: "الاثنين",
+    Tuesday: "الثلاثاء",
+    Wednesday: "الأربعاء",
+    Thursday: "الخميس",
+    Friday: "الجمعة",
+    Saturday: "السبت",
+  };
+
+  let [hour, period] = time.split(" ");
+  hour = hour.replace(/\d/g, (d) => "٠١٢٣٤٥٦٧٨٩"[d]);
+
+  period = period === "PM" ? "مساءا" : "صباحا";
+
+  return {
+    translatedDay: daysMap[day],
+    translatedTime: `${hour} ${period}`,
+  };
+};

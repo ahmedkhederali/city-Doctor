@@ -138,9 +138,11 @@ export default function PersistentDrawerLeft() {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography noWrap component="div" sx={{ flexGrow: 1 }}>
-            سرس الليان
-          </Typography>
+           <Button 
+          component={RouterLink}
+          variant="h5" to='/' sx={{ fontWeight: 'bold' }} color="inherit">
+          سرس الليان          
+          </Button>     
           <Button 
           component={RouterLink}
           variant="h5" to='/login' sx={{ fontWeight: 'bold' }} color="inherit">

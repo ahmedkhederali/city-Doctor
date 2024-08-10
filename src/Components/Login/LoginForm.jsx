@@ -15,13 +15,29 @@ import Container from '@mui/material/Container';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import ArrowBackIcon
 import { Form, Field } from 'react-final-form';
 import { loginSchema } from '../../Services/Validation/validationSchema'; // Import the Zod schema
+import { loginAuthActions } from "../../redux/Actions/loginAuthActions"
+import { useDispatch } from 'react-redux';
+import { toast } from "react-toastify";
 
 export default function SignIn() {
   const navigate = useNavigate(); // Initialize useNavigate
+  const dispatch = useDispatch(); // Initialize useDispatch
 
   const onSubmit = async (values) => {
-    console.log(values);
+    try {
+      // Dispatch the login action with email and password
+      const res=await dispatch(loginAuthActions(values.email, values.password));
+      if(res.accessToken){
+        toast.success('تم تسجيل الدخول بنجاح');
+      navigate('/'); // Redirect to the desired route after login
+      localStorage.setItem("token",res.accessToken)
+      }
+    } catch (error) {
+      // Handle the error by showing a toaster with the error message
+      toast.error(error?.response?.data?.msg || 'حدث خطأ أثناء تسجيل الدخول');
+    }
   };
+  
 
   return (
       <Container component="main" maxWidth="xs">

@@ -28,3 +28,10 @@
     overflow: hidden; /* Prevent scroll */
   }
   
+  [dir='rtl'] .slick-next {
+    left: -15px !important;
+  }
+
+  [dir='rtl'] .slick-prev {
+    right: -17px !important;
+}

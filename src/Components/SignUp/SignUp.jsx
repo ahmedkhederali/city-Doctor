@@ -14,12 +14,27 @@ import Container from '@mui/material/Container';
 import { Form, Field } from 'react-final-form';
 import { signupSchema } from '../../Services/Validation/validationSchema'; // Import the Zod schema
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import ArrowBackIcon
+import { signupAuthAction } from '../../redux/Actions/registerAuthActions';
+import { toast } from "react-toastify";
+import { useDispatch } from 'react-redux';
 
 export default function SignUp() {
   const navigate = useNavigate(); // Initialize useNavigate
+  const dispatch = useDispatch(); // Initialize useDispatch
 
   const onSubmit = async (values) => {
-    console.log(values);
+    try {
+      // Dispatch the login action with email and password
+      const res=await dispatch(signupAuthAction(values));
+      if(res.accessToken){
+        toast.success('تم انشاء حساب  بنجاح');
+        navigate('/'); // Redirect to the desired route after login
+        localStorage.setItem("token",res.accessToken)
+      }
+    } catch (error) {
+      // Handle the error by showing a toaster with the error message
+      toast.error(error?.response?.data?.msg || 'حدث خطأ');
+    }
   };
 
   return (
@@ -125,17 +140,17 @@ export default function SignUp() {
                     />
                   )}
                 </Field>
-                <Field name="mobile">
+                <Field name="phone">
                   {({ input, meta }) => (
                     <TextField
                       {...input}
                       margin="normal"
                       required
                       fullWidth
-                      name="mobile"
+                      name="phone"
                       label="رقم الهاتف"
                       type="tel"
-                      id="mobile"
+                      id="phone"
                       autoComplete="tel"
                       error={meta.touched && meta.error}
                       helperText={meta.touched && meta.error}

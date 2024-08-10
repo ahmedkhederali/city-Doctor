@@ -21,9 +21,9 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Divider,
   TextField,
   InputAdornment,
+  CircularProgress,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -37,7 +37,7 @@ import {
   FaChevronDown, // Icon for accordion
 } from "react-icons/fa";
 import { MdOutlineAccessTime } from "react-icons/md";
-import { translateDayAndTime } from "../../Common/Helper/helper";
+import { convertToArabicNumerals, translateDayAndTime } from "../../Common/Helper/helper";
 
 const SpecialistDoctor = () => {
   const { id } = useParams(); // Get the specialty ID from URL parameters
@@ -70,7 +70,7 @@ const SpecialistDoctor = () => {
   );
 
   // Replace CircularProgress with a Not Found Message
-  if (status === "loading" || !doctors) {
+  if (status === "loading") {
     return (
       <Box
         sx={{
@@ -82,10 +82,7 @@ const SpecialistDoctor = () => {
           textAlign: "center",
         }}
       >
-        <FaRegFrownOpen style={{ fontSize: 100, color: "gray" }} />
-        <Typography variant="h4" color="gray" sx={{ mt: 2 }}>
-          لا توجد بيانات
-        </Typography>
+        <CircularProgress />
       </Box>
     );
   }
@@ -100,7 +97,7 @@ const SpecialistDoctor = () => {
     >
       <Box display="flex" flexDirection="column" mb={2}>
         <Typography variant="h4" gutterBottom color="gray">
-          الأطباء المتخصصون في {specialistName}{" "}
+          الأطباء المتخصصون في {specialistName}
           {/* <Badge badgeContent={filteredDoctors.length} color="primary" sx={{ marginRight: 1 }} /> */}
         </Typography>
         
@@ -123,198 +120,134 @@ const SpecialistDoctor = () => {
       </Box>
 
       {filteredDoctors?.length > 0 ? (
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+        <Grid container spacing={2}>
           {filteredDoctors.map((doctor) => (
-            <Card
-              key={doctor._id}
-              sx={{
-                width: { xs: "100%", sm: "calc(50% - 16px)" }, // Full width on mobile, half width on larger screens
-                p: 2,
-                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)", // Add box shadow
-                borderRadius: 2, // Optional: Add border radius
-                cursor: "pointer",
-              }}
-            >
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                  <Box sx={{ display: "flex" }}>
-                    <CardMedia
-                      component="img"
-                      sx={{
-                        width: 100,
-                        height: 100,
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                      }}
-                      image={
-                        doctor.doctor_img?.url || "default-doctor-image.jpg"
-                      }
-                      alt={doctor.doc_name}
-                    />
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontWeight: "bold",
-                          color: "rgb(0, 112, 205)", // Set name color
-                          fontSize: 18, // Increase font size
-                        }}
-                      >
-                        {doctor.doc_name}
-                      </Typography>
-                      <Rating
-                        value={doctor.rating}
-                        readOnly
-                        precision={0.5}
-                        sx={{ mt: 1 }}
-                      />
-                      <Typography
-                        variant="body2"
-                        sx={{ fontSize: 16, fontWeight: 500 }} // Increase font size and weight
-                        color="textSecondary"
-                        onClick={() => navigate(`/doctor_profile/${doctor._id}`)} // Redirect on click
-
-                      >
-                        {doctor.small_desc?.length > 100
-                          ? `${doctor.small_desc.slice(0, 100)}...`
-                          : doctor.small_desc}
-                      </Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          mt: 1,
-                        }}
-                      >
-                        <IconButton
-                          size="small"
-                          sx={{ color: "red" }} // Set icon color
-                        >
-                          <FaMapMarkerAlt />
-                        </IconButton>
-                        <Typography variant="body2">
-                          {doctor.location}
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          mt: 1,
-                        }}
-                      >
-                        <IconButton
-                          size="small"
-                          sx={{ color: "green" }} // Set icon color
-                        >
-                          <FaPhone />
-                        </IconButton>
-                        <Typography variant="body2">
-                          {doctor.phone}
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          mt: 1,
-                        }}
-                      >
-                        <IconButton
-                          size="small"
-                          sx={{ color: "blue" }} // Set icon color
-                        >
-                          <FaMoneyBillWave />
-                        </IconButton>
-                        <Typography variant="body2">
-                          السعر: {doctor.detection_price} جنيه
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          mt: 1,
-                        }}
-                      >
-                        <IconButton
-                          size="small"
-                          sx={{ color: "purple" }} // Set icon color
-                        >
-                          <MdOutlineAccessTime />
-                        </IconButton>
-                        <Typography variant="body2">
-                          الانتظار: {doctor.wait_time} دقيقة
-                        </Typography>
-                      </Box>
-                    </CardContent>
-                  </Box>
-                </Grid>
-
-                {/* Divider between columns */}
-                <Divider orientation="vertical" flexItem />
-
-                {/* Second Column with Accordion */}
-                <Grid item xs={12} md={5}>
-                <Accordion
-                    expanded={expanded === doctor._id}
-                    onChange={() =>
-                      setExpanded(expanded === doctor._id ? false : doctor._id)
+            <Grid item xs={12} sm={6} md={4} key={doctor._id}>
+              <Card
+                sx={{
+                  width: "100%", // Full width
+                  minHeight: 330, // Set minimum width for the card
+                  p: 2,
+                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)", // Add box shadow
+                  borderRadius: 2, // Optional: Add border radius
+                  cursor: "pointer",
+                }}
+                onClick={() => navigate(`/doctor_profile/${doctor._id}`)} // Redirect on click
+              >
+                <Box sx={{ display: "flex" }}>
+                  <CardMedia
+                    component="img"
+                    sx={{
+                      width: 100,
+                      height: 100,
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                    image={
+                      doctor.doctor_img?.url || "default-doctor-image.jpg"
                     }
-                  >
-                    <AccordionSummary
-                      expandIcon={<FaChevronDown />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
+                    alt={doctor.doc_name}
+                  />
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: "bold",
+                        color: "rgb(0, 112, 205)", // Set name color
+                        fontSize: 18, // Increase font size
+                      }}
                     >
-                      <Typography>
-                        {expanded === doctor._id
-                          ? "اخفاء مواعيد الدكتور"
-                          : "إظهار مواعيد عمل الدكتور"}
+                      {doctor.doc_name}
+                    </Typography>
+                    <Rating
+                      value={doctor.rating}
+                      readOnly
+                      precision={0.5}
+                      sx={{ mt: 1 }}
+                    />
+                    <Typography
+                      variant="body2"
+                      sx={{ fontSize: 16, fontWeight: 500 }} // Increase font size and weight
+                      color="textSecondary"
+                    >
+                      {doctor.small_desc?.length > 100
+                        ? `${doctor.small_desc.slice(0, 100)}...`
+                        : doctor.small_desc}
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        mt: 1,
+                      }}
+                    >
+                      <IconButton
+                        size="small"
+                        sx={{ color: "red" }} // Set icon color
+                      >
+                        <FaMapMarkerAlt />
+                      </IconButton>
+                      <Typography variant="body2">
+                        {doctor.location}
                       </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <TableContainer component={Paper}>
-                        <Table size="small" aria-label="doctor working hours">
-                          <TableHead>
-                            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                              <TableCell>اليوم</TableCell>
-                              <TableCell>وقت البدء</TableCell>
-                              <TableCell>وقت الانتهاء</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                          {doctor.time_for_works.map((time) => {
-                          const {
-                            translatedDay,
-                            translatedTime,
-                          } = translateDayAndTime(
-                            time.day,
-                            time.start_time
-                          );
-                          return (
-                            <TableRow key={time._id}>
-                              <TableCell>{translatedDay}</TableCell>
-                              <TableCell>{translatedTime}</TableCell>
-                              <TableCell>
-                                {translateDayAndTime(
-                                  time.day,
-                                  time.end_time
-                                ).translatedTime}
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    </AccordionDetails>
-                  </Accordion>
-                </Grid>
-              </Grid>
-            </Card>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        mt: 1,
+                      }}
+                    >
+                      <IconButton
+                        size="small"
+                        sx={{ color: "green" }} // Set icon color
+                      >
+                        <FaPhone />
+                      </IconButton>
+                      <Typography variant="body2">
+                        {convertToArabicNumerals(doctor.phone)}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        mt: 1,
+                      }}
+                    >
+                      <IconButton
+                        size="small"
+                        sx={{ color: "blue" }} // Set icon color
+                      >
+                        <FaMoneyBillWave />
+                      </IconButton>
+                      <Typography variant="body2">
+                        السعر: {convertToArabicNumerals(doctor.detection_price)} جنيه
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        mt: 1,
+                      }}
+                    >
+                      <IconButton
+                        size="small"
+                        sx={{ color: "purple" }} // Set icon color
+                      >
+                        <MdOutlineAccessTime />
+                      </IconButton>
+                      <Typography variant="body2">
+                        الانتظار: {convertToArabicNumerals(30)} دقيقة
+                      </Typography>
+                    </Box>
+                  </CardContent>
+                </Box>
+              </Card>
+            </Grid>
           ))}
-        </Box>
+        </Grid>
       ) : (
         <Box
           sx={{
@@ -337,10 +270,3 @@ const SpecialistDoctor = () => {
 };
 
 export default SpecialistDoctor;
-
-
-
-
-
-
-

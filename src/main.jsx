@@ -38,7 +38,7 @@ root.render(
       <Provider store={store}>
         <AppProvider store={store}>
           <App />
-          <ToastContainer />
+          <ToastContainer rtl />
 
         </AppProvider>
       </Provider>

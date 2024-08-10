@@ -121,7 +121,7 @@ export default function Features() {
             <Typography color="text.secondary" variant="body2" sx={{ my: 0.5 }}>
               {selectedFeature.description}
             </Typography>
-            <Link
+            {/* <Link
               color="primary"
               variant="body2"
               fontWeight="bold"
@@ -138,7 +138,7 @@ export default function Features() {
                 fontSize="small"
                 sx={{ mt: '1px', ml: '2px' }}
               />
-            </Link>
+            </Link> */}
           </Box>
         </Box>
         <Stack
@@ -206,7 +206,7 @@ export default function Features() {
                   >
                     {description}
                   </Typography>
-                  <Link
+                  {/* <Link
                     color="primary"
                     variant="body2"
                     fontWeight="bold"
@@ -225,7 +225,7 @@ export default function Features() {
                       fontSize="small"
                       sx={{ mt: '1px', ml: '2px' }}
                     />
-                  </Link>
+                  </Link> */}
                 </Box>
               </Box>
             </Card>

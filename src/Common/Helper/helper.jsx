@@ -38,3 +38,44 @@ export const imageMap = {
     translatedTime: `${hour} ${period}`,
   };
 };
+
+export function convertToArabicNumerals(number) {
+  // Define Arabic numeral mapping
+  const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  
+  // Convert number to string to handle each digit
+  const numberString = number.toString();
+  
+  // Map each digit to its Arabic numeral
+  return numberString.split('').map(digit => arabicNumerals[digit]).join('');
+}
+
+// Function to convert numbers to Arabic numerals
+const toArabicNumerals = (number) => {
+  const arabicNumerals = '٠١٢٣٤٥٦٧٨٩';
+  return number.toString().replace(/\d/g, (digit) => arabicNumerals[digit]);
+};
+
+// Function to translate month names to Arabic
+const getArabicMonth = (month) => {
+  const months = [
+    'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+    'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+  ];
+  return months[month];
+};
+
+// Function to format the date and time in Arabic
+export const formatArabicDateTime = (date) => {
+  const dt = new Date(date);
+  const day = toArabicNumerals(dt.getDate());
+  const month = getArabicMonth(dt.getMonth());
+  const year = toArabicNumerals(dt.getFullYear());
+  const hours = toArabicNumerals(dt.getHours().toString().padStart(2, '0'));
+  const minutes = toArabicNumerals(dt.getMinutes().toString().padStart(2, '0'));
+
+  // Format time based on AM/PM
+  const amPm = dt.getHours() >= 12 ? 'م' : 'ص';
+  
+  return `${day} ${month} ${year} ${hours}:${minutes} ${amPm}`;
+};

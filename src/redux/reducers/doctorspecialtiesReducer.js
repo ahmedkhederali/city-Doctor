@@ -29,6 +29,14 @@ import {
           status: 'failed',
           error: action,
         };
+      case 'CLEAR_DOCTORS':
+        return {
+          ...state,
+          items: {
+            ...state.items,
+            doctors: [],
+          },
+        };
       default:
         return state;
     }

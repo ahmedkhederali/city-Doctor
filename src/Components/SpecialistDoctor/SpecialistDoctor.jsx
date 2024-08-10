@@ -27,7 +27,7 @@ import {
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { fetchSpecialties } from "../../redux/Actions/doctoBasedonSpecialist";
+import { clearDoctors, fetchSpecialties } from "../../redux/Actions/doctoBasedonSpecialist";
 import { AppContext } from "../../contextApi/AppContext";
 import {
   FaMapMarkerAlt,
@@ -37,7 +37,7 @@ import {
   FaChevronDown, // Icon for accordion
 } from "react-icons/fa";
 import { MdOutlineAccessTime } from "react-icons/md";
-import { convertToArabicNumerals, translateDayAndTime } from "../../Common/Helper/helper";
+import { calculateAverageRating, convertToArabicNumerals, translateDayAndTime } from "../../Common/Helper/helper";
 
 const SpecialistDoctor = () => {
   const { id } = useParams(); // Get the specialty ID from URL parameters
@@ -55,6 +55,7 @@ const SpecialistDoctor = () => {
   const [searchQuery, setSearchQuery] = useState(""); // State to manage the search query
 
   useEffect(() => {
+    dispatch(clearDoctors()); // Clear previous doctors data
     dispatch(fetchSpecialties(id)); // Dispatch the action to fetch doctors based on specialty ID
   }, [id, dispatch]);
 
@@ -68,8 +69,13 @@ const SpecialistDoctor = () => {
   const filteredDoctors = doctors?.filter((doctor) =>
     doctor.doc_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  // Replace CircularProgress with a Not Found Message
+ const handelRating= (ratings)=>{ 
+  const averageRating = ratings?.length
+  ? calculateAverageRating(ratings)
+  : 0;
+  return averageRating;
+}
+ 
   if (status === "loading") {
     return (
       <Box
@@ -86,7 +92,7 @@ const SpecialistDoctor = () => {
       </Box>
     );
   }
-
+console.log("filteredDoctors",filteredDoctors)
   return (
     <Box
       sx={{
@@ -97,7 +103,7 @@ const SpecialistDoctor = () => {
     >
       <Box display="flex" flexDirection="column" mb={2}>
         <Typography variant="h4" gutterBottom color="gray">
-          الأطباء المتخصصون في {specialistName}
+          الأطباء المتخصصون قسم {specialistName} 
           {/* <Badge badgeContent={filteredDoctors.length} color="primary" sx={{ marginRight: 1 }} /> */}
         </Typography>
         
@@ -159,12 +165,14 @@ const SpecialistDoctor = () => {
                     >
                       {doctor.doc_name}
                     </Typography>
-                    <Rating
+                    {/* <Rating
                       value={doctor.rating}
                       readOnly
                       precision={0.5}
                       sx={{ mt: 1 }}
-                    />
+                    /> */}
+                      <Rating value={handelRating(doctor.ratings)} readOnly precision={0.5} />
+
                     <Typography
                       variant="body2"
                       sx={{ fontSize: 16, fontWeight: 500 }} // Increase font size and weight
@@ -260,7 +268,7 @@ const SpecialistDoctor = () => {
           <Box textAlign="center">
             <FaRegFrownOpen style={{ fontSize: 100, color: "gray" }} />
             <Typography variant="h4" color="gray" sx={{ mt: 2 }}>
-              لا توجد بيانات
+              لا يوجد أطباء في هذا التخصص
             </Typography>
           </Box>
         </Box>

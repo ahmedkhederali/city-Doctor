@@ -16,6 +16,13 @@ export const imageMap = {
     6: image7
   };
 
+  export const calculateAverageRating = (ratings) => {
+    if (!ratings.length) return 0;
+  
+    const total = ratings.reduce((sum, rating) => sum + rating.rating, 0);
+    return parseFloat((total / ratings.length).toFixed(1));
+  };
+
   // Function to translate days and time
   export const translateDayAndTime = (day, time) => {
   const daysMap = {

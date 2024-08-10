@@ -24,7 +24,12 @@ export const fetchSpecialties = (id) => async (dispatch) => {
   try {
     const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/doctors/specialty/${id}`);
     dispatch(fetchSpecialtiesSuccess(response.data));
+    return response.data
   } catch (error) {
     dispatch(fetchSpecialtiesFailure(error));
   }
 };
+// actions/doctoBasedonSpecialist.js
+export const clearDoctors = () => ({
+  type: 'CLEAR_DOCTORS',
+});

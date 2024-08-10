@@ -21,6 +21,9 @@ import {
   TableRow,
   Paper,
   CircularProgress,
+  Modal,
+  Fade,
+  Backdrop,
 } from "@mui/material";
 import {
   FaMapMarkerAlt,
@@ -38,6 +41,8 @@ import { translateDayAndTime } from "../../Common/Helper/helper";
 import { createComment } from "../../redux/Actions/createComment";
 import { AppContext } from "../../contextApi/AppContext";
 import Comment from "../../Common/Comment/Comments";
+import { calculateAverageRating } from "../../Common/Helper/helper"; // Helper function to calculate average rating
+import { rateDoctor } from "../../redux/Actions/ratingDoctors";
 
 const DoctorProfile = () => {
   const { drawerFWidth, setDrawerFWidth } = useContext(AppContext);
@@ -53,6 +58,8 @@ const DoctorProfile = () => {
   const [comment, setComment] = useState("");
   const [expanded, setExpanded] = useState(false);
   const [visibleComments, setVisibleComments] = useState(5);
+  const [openModal, setOpenModal] = useState(false);
+  const [rating, setRating] = useState(0);
 
   useEffect(() => {
     dispatch(fetchSingleDoctor(id));
@@ -68,6 +75,61 @@ const DoctorProfile = () => {
     }
   }, [status, error]);
 
+  const handleShowMoreComments = () => {
+    setVisibleComments((prev) => prev + 5);
+  };
+
+  const handleCreatComment = () => {
+    if (!localStorage.getItem("token")) {
+      toast.warning("يجب تسجيل الدخول");
+      navigate("/login");
+      return;
+    }
+    if (comment.trim() === "") {
+      toast.error("يرجى كتابة تعليق قبل الإرسال");
+      return;
+    }
+
+    dispatch(createComment(id, "Doctor", comment))
+      .then((res) => {
+        toast.success("تم أضافة تعليقك بنجاح");
+        setComment(""); // Clear the comment input field
+        dispatch(fetchSingleDoctorComments(id)); // Refresh the comments
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
+  const handleSubmitRating = () => {
+    if (!localStorage.getItem("token")) {
+      toast.warning("يجب تسجيل الدخول");
+      navigate("/login");
+      return;
+    }
+    if (rating === 0) {
+      toast.error("يرجى تحديد تقييم قبل الإرسال");
+      return;
+    }
+
+    // Dispatch an action to submit the rating
+    dispatch(rateDoctor(id, rating))
+      .then(() => {
+        toast.success("تم أضافة تقييمك بنجاح");
+        setOpenModal(false);
+        dispatch(fetchSingleDoctor(id)); // Refresh the doctor data
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+  const averageRating = doctor?.ratings?.length
+    ? calculateAverageRating(doctor.ratings)
+    : 0;
+
   if (status === "loading" || !doctor) {
     return (
       <Box
@@ -80,44 +142,20 @@ const DoctorProfile = () => {
           textAlign: "center",
         }}
       >
-        <CircularProgress/>
+        <CircularProgress />
       </Box>
     );
   }
 
-  const handleShowMoreComments = () => {
-    setVisibleComments((prev) => prev + 5);
-  };
-
-  const handleCreatComment = () => {
-    if(!localStorage.getItem("token")){
-      toast.warning ("يجب تسجيل الدخول");
-      navigate('/login');
-      return 
-    }
-    if (comment.trim() === "") {
-      toast.error("يرجى كتابة تعليق قبل الإرسال");
-      return;
-    }
-
-    dispatch(createComment(id,'Doctor', comment))
-      .then((res) => {
-        toast.success("تم أضافة تعليقك بنجاح");
-        setComment(""); // Clear the comment input field
-        dispatch(fetchSingleDoctorComments(id)); // Refresh the comments
-      }).catch((err)=>{
-        toast.error(err.message)
-      })
-  };
   return (
     <Box
-    sx={{
-      marginLeft: { xs: 0, sm: `${drawerFWidth - 10}px` },
-      padding: 2,
-      transition: 'margin 0.3s ease-out',
-      width: { xs: '100%', md: '70%' }, // Full width on mobile, 70% width on large screens
-    }}
-  >
+      sx={{
+        marginLeft: { xs: 0, sm: `${drawerFWidth - 10}px` },
+        padding: 2,
+        transition: "margin 0.3s ease-out",
+        width: { xs: "100%", md: "70%" }, // Full width on mobile, 70% width on large screens
+      }}
+    >
       {doctor ? (
         <Box sx={{ padding: 2 }}>
           <Card sx={{ display: "flex", flexDirection: "column", mb: 2 }}>
@@ -125,7 +163,7 @@ const DoctorProfile = () => {
             <Box
               sx={{
                 display: "flex",
-                alignItems: "center",
+                alignItems: "start",
                 justifyContent: "space-between",
                 maxWidth: "100%", // Ensure content stays within screen bounds
               }}
@@ -171,14 +209,12 @@ const DoctorProfile = () => {
                   sx={{
                     color: "gray",
                     whiteSpace: "wrap",
-                    // overflow: "hidden",
-                    // textOverflow: "ellipsis",
                     mb: 1,
                   }}
                 >
                   {doctor.small_desc}
                 </Typography>
-                <Rating value={doctor.rating} readOnly precision={0.5} />
+                <Rating value={averageRating} readOnly precision={0.5} />
               </CardContent>
             </Box>
 
@@ -253,11 +289,11 @@ const DoctorProfile = () => {
             <AccordionSummary expandIcon={<FaChevronDown />}>
               <Typography>
                 {expanded ? "اخفاء مواعيد الدكتور" : "إظهار مواعيد عمل الدكتور"}
-              </Typography>
+              </Typography>{" "}
             </AccordionSummary>
             <AccordionDetails>
               <TableContainer component={Paper}>
-                <Table size="small">
+                <Table>
                   <TableHead>
                     <TableRow>
                       <TableCell>اليوم</TableCell>
@@ -288,51 +324,129 @@ const DoctorProfile = () => {
               </TableContainer>
             </AccordionDetails>
           </Accordion>
-          {commmentStatus=== "loading" && 
-           <Typography variant="body1" color="textSecondary">
-                لا توجد تعليقات
-            </Typography>
-              }
-          {/* Comments Section */}
-          <Box sx={{ mt: 4 }}>
-      <Typography variant="h5" gutterBottom>
-        التعليقات
-      </Typography>
-      {comments?.length > 0 ? (
-        comments.slice(0, visibleComments).map((comment) => (
-          <Comment key={comment._id} comment={comment} />
-        ))
-      ) : (
-        <Typography variant="body1" color="textSecondary">
-          لا توجد تعليقات
-        </Typography>
-      )}
-      {comments?.length > visibleComments && (
-        <span onClick={handleShowMoreComments} style={{ cursor: 'pointer', color: '#1976d2' }}>
-          عرض المزيد
-        </span>
-      )}
-    </Box>
 
-          {/* Input for User Comment */}
-          <Box sx={{ mt: 2 }}>
+          {/* Comment Section */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+              التعليقات
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                mt: 2,
+                mb: 1,
+               
+                cursor: "pointer", // Change cursor to pointer to indicate it's clickable
+                transition: "background-color 0.3s ease", // Smooth transition for background color
+                "&:hover": {
+                  backgroundColor: "rgba(0, 150, 180, 0.1)", // Change background color on hover (example color)
+                  borderRadius: "4px", // Optional: adds rounded corners on hover
+                },
+              }}
+              onClick={handleOpenModal}
+            >
+              تقييم الدكتور
+            </Typography>
+          </Box>
+          {comments?.length > 0 ? (
+            comments
+              .slice(0, visibleComments)
+              .map((comment) => <Comment key={comment._id} comment={comment} />)
+          ) : (
+            <Typography variant="body1" color="textSecondary">
+              لا توجد تعليقات
+            </Typography>
+          )}
+
+          <Box sx={{ mb: 2 }}>
             <TextField
               fullWidth
-              label="أضف تعليقك"
               multiline
               rows={1}
               variant="outlined"
-              sx={{ mb: 2 }}
+              label="اكتب تعليقك هنا"
               value={comment}
-              onChange={(e)=>setComment(e.target.value)}
+              onChange={(e) => setComment(e.target.value)}
             />
-            <Button variant="contained" color="primary" onClick={handleCreatComment}>
-              إرسال
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleCreatComment}
+              sx={{ mt: 1 }}
+            >
+              أضف تعليق
             </Button>
           </Box>
+
+          {comments.length > visibleComments && (
+            <Button onClick={handleShowMoreComments} variant="text">
+              عرض المزيد
+            </Button>
+          )}
+
+          {/* Rating Modal */}
+          <Modal
+            open={openModal}
+            onClose={handleCloseModal}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={openModal}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: 300,
+                  bgcolor: "background.paper",
+                  border: "2px solid #fff",
+                  boxShadow: 24,
+                  p: 4,
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: 2,
+                  }}
+                >
+                  <Rating
+                    name="doctor-rating"
+                    value={rating}
+                    onChange={(event, newValue) => setRating(newValue)}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmitRating}
+                    sx={{ mt: 2 }}
+                  >
+                    إرسال التقييم
+                  </Button>
+                </Box>
+              </Box>
+            </Fade>
+          </Modal>
         </Box>
       ) : (
-        <CircularProgress />
+        <Box sx={{ textAlign: "center", mt: 4 }}>
+          <FaRegFrownOpen size={50} />
+          <Typography variant="h6" sx={{ mt: 2 }}>
+            لم يتم العثور على معلومات الطبيب.
+          </Typography>
+        </Box>
       )}
     </Box>
   );

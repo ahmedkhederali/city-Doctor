@@ -358,7 +358,7 @@ const DoctorProfile = () => {
               .slice(0, visibleComments)
               .map((comment) => <Comment key={comment._id} comment={comment} />)
           ) : (
-            <Typography variant="body1" color="textSecondary">
+            <Typography variant="body1" color="textSecondary" sx={{mb:1}}>
               لا توجد تعليقات
             </Typography>
           )}

@@ -7,6 +7,9 @@ import singleDoctorCommentsReducer from './reducers/getSingleDoctorCommentsReduc
 import createDoctorCommentReducer from './reducers/createDoctorCommentReducer';
 import authReducer from './reducers/loginReducer';
 import userReducer from './reducers/registerReducer';
+import medicalLabsReducer from './reducers/medicalLabsReducer';
+import singleMedicalLabReducer from './reducers/getSingleMedicalLabReducer';
+import medicalLabReducer from './reducers/RatingMedicalLabsReducer';
 
 
 export const store = configureStore({
@@ -17,6 +20,9 @@ export const store = configureStore({
     single_comments:singleDoctorCommentsReducer,
     create_comment:createDoctorCommentReducer,
     login_auth:authReducer,
-    register_auth:userReducer
+    register_auth:userReducer,
+    medical_lab:medicalLabsReducer,
+    singlr_medicalLab:singleMedicalLabReducer,
+    rate_medicallab:medicalLabReducer
   },
 });

@@ -177,7 +177,7 @@ export default function PersistentDrawerLeft() {
             سرس الليان
           </Button>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center',}}>
             {isLoggedIn ? (
               <>
                 <IconButton onClick={handleMenuClick} color="inherit">
@@ -189,10 +189,10 @@ export default function PersistentDrawerLeft() {
               </>
             ) : (
               <>
-                <Button component={RouterLink} variant="h5" to="/login" sx={{ fontWeight: 'bold' }} color="inherit">
+                <Button component={RouterLink} variant="h5" to="/login" sx={{ fontWeight: 'bold' , padding:1}} color="inherit">
                   تسجيل الدخول
                 </Button>
-                <Button component={RouterLink} variant="h5" to="/signup" sx={{ fontWeight: 'bold' }} color="inherit">
+                <Button component={RouterLink} variant="h5" to="/signup" sx={{ fontWeight: 'bold', padding:1 }} color="inherit">
                   انشاء حساب
                 </Button>
               </>

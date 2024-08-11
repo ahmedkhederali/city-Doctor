@@ -23,7 +23,8 @@ const items = [
     description: 'يمكنك استعراض جميع الأطباء المتاحين في المدينة والحصول على تفاصيل التواصل معهم ومواقعهم.',
     imageLight: `url(${DocImage})`,
     imageDark: `url(${DocImage})`,
-    link:"/doctors"
+    link:"/doctors",
+    showLink:false
   },
   {
     icon: <LocalPharmacyIcon />,
@@ -31,7 +32,9 @@ const items = [
     description: 'يمكنك العثور على جميع الصيدليات في المدينة، ومعرفة أوقات العمل والموقع.',
     imageLight: `url(${pharmacyImage})`,
     imageDark: `url(${pharmacyImage})`,
-    link:"/pharmacies"
+    link:"/pharmacies",
+    showLink:false
+
   },
   {
     icon: <BiotechIcon />,
@@ -39,7 +42,8 @@ const items = [
     description: 'يمكنك العثور على جميع معامل التحاليل الطبية ومراكز الأشعة في المدينة.',
     imageLight: `url(${labImage})`,
     imageDark: `url(${labImage})`,
-    link:"/medical-labs"
+    link:"/medical-labs",
+    showLink:true
   },
 ];
 
@@ -121,7 +125,7 @@ export default function Features() {
             <Typography color="text.secondary" variant="body2" sx={{ my: 0.5 }}>
               {selectedFeature.description}
             </Typography>
-            {/* <Link
+           {selectedFeature.showLink && <Link
               color="primary"
               variant="body2"
               fontWeight="bold"
@@ -138,7 +142,7 @@ export default function Features() {
                 fontSize="small"
                 sx={{ mt: '1px', ml: '2px' }}
               />
-            </Link> */}
+            </Link>}
           </Box>
         </Box>
         <Stack
@@ -149,7 +153,7 @@ export default function Features() {
           useFlexGap
           sx={{ width: '100%', display: { xs: 'none', sm: 'flex' } }}
         >
-          {items.map(({ icon, title, description }, index) => (
+          {items.map(({ icon, title, description,showLink }, index) => (
             <Card
               key={index}
               variant="outlined"
@@ -206,7 +210,7 @@ export default function Features() {
                   >
                     {description}
                   </Typography>
-                  {/* <Link
+                   <Link
                     color="primary"
                     variant="body2"
                     fontWeight="bold"
@@ -225,7 +229,8 @@ export default function Features() {
                       fontSize="small"
                       sx={{ mt: '1px', ml: '2px' }}
                     />
-                  </Link> */}
+                  </Link>
+
                 </Box>
               </Box>
             </Card>

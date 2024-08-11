@@ -177,7 +177,7 @@ export default function PersistentDrawerLeft() {
             سرس الليان
           </Button>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center',}}>
+          <Box sx={{ display: 'flex', alignItems: 'center',  marginLeft: 'auto' }}>
             {isLoggedIn ? (
               <>
                 <IconButton onClick={handleMenuClick} color="inherit">

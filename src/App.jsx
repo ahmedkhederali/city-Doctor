@@ -12,6 +12,7 @@ import MedicalLabs from './Components/MedicalLabs/MedicalLab';
 import SpecialistDoctor from './Components/SpecialistDoctor/SpecialistDoctor';
 import DoctorProfile from './Components/DoctorProfile/DoctorProfile';
 import MedicalLabProfile from './Components/MedicalLabProfile/MedicalLabProfile';
+import PharamacyProfile from './Components/PharamacyProfile/PharamacyProfile';
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/specialties/:id" element={<SpecialistDoctor/>} exact />
           <Route path="/doctor_profile/:id" element={<DoctorProfile/>} exact />
           <Route path="/medical_profile/:id" element={<MedicalLabProfile/>} exact />
+          <Route path="/pharamcy_profile/:id" element={<PharamacyProfile/>} exact />
 
         </Route>
         <Route path="/login" element={<SignIn />} exact/>

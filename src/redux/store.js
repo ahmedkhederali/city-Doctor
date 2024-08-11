@@ -10,6 +10,9 @@ import userReducer from './reducers/registerReducer';
 import medicalLabsReducer from './reducers/medicalLabsReducer';
 import singleMedicalLabReducer from './reducers/getSingleMedicalLabReducer';
 import medicalLabReducer from './reducers/RatingMedicalLabsReducer';
+import PharamacyReducer from './reducers/pharamacyReducer';
+import singlePharamacyReducer from './reducers/getSinglePharamacyReducer';
+import singlePharamcyCommentsReducer from './reducers/getSinglePharamcyCommentsReducer';
 
 
 export const store = configureStore({
@@ -23,6 +26,9 @@ export const store = configureStore({
     register_auth:userReducer,
     medical_lab:medicalLabsReducer,
     singlr_medicalLab:singleMedicalLabReducer,
-    rate_medicallab:medicalLabReducer
+    rate_medicallab:medicalLabReducer,
+    pharamacy:PharamacyReducer,
+    single_pharamcy:singlePharamacyReducer,
+    singlr_pharamcy_comment :singlePharamcyCommentsReducer
   },
 });

@@ -31,6 +31,8 @@ export default function SignIn() {
         toast.success('تم تسجيل الدخول بنجاح');
       navigate('/'); // Redirect to the desired route after login
       localStorage.setItem("token",res.accessToken)
+      localStorage.setItem("userId",res.user._id)
+
       }
     } catch (error) {
       // Handle the error by showing a toaster with the error message

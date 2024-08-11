@@ -1,28 +1,28 @@
 // src/redux/actions/specialtiesActions.js
 import axios from 'axios';
 
-export const MEDICAL_LAB_REQUEST = 'MEDICAL_LAB_REQUEST';
-export const MEDICAL_LAB_SUCCESS = 'MEDICAL_LAB_SUCCESS';
-export const MEDICAL_LAB_FAILURE = 'MEDICAL_LAB_FAILURE';
+export const PHARAMACY_REQUEST = 'PHARAMACY_REQUEST';
+export const PHARAMACY_SUCCESS = 'PHARAMACY_SUCCESS';
+export const PHARAMACY_FAILURE = 'PHARAMACY_FAILURE';
 
 export const fetchSpecialtiesRequest = () => ({
-  type: MEDICAL_LAB_REQUEST
+  type: PHARAMACY_REQUEST
 });
 
 export const fetchSpecialtiesSuccess = (data) => ({
-  type: MEDICAL_LAB_SUCCESS,
+  type: PHARAMACY_SUCCESS,
   payload: data
 });
 
 export const fetchSpecialtiesFailure = (error) => ({
-  type: MEDICAL_LAB_FAILURE,
+  type: PHARAMACY_FAILURE,
   payload: error
 });
 
-export const fetchMedicalLabs = () => async (dispatch) => {
+export const fetchPharamacy = () => async (dispatch) => {
   dispatch(fetchSpecialtiesRequest());
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/medicallabs`);
+    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/pharmacies`);
     dispatch(fetchSpecialtiesSuccess(response.data));
   } catch (error) {
     dispatch(fetchSpecialtiesFailure(error.message));

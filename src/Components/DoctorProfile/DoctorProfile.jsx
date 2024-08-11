@@ -254,7 +254,7 @@ const DoctorProfile = () => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  flexBasis: "calc(50% - 16px)",
+                  flexBasis: "calc(100% - 16px)",
                 }}
               >
                 <IconButton size="small" sx={{ color: "blue" }}>
@@ -268,7 +268,7 @@ const DoctorProfile = () => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  flexBasis: "calc(50% - 16px)",
+                  flexBasis: "calc(100% - 16px)",
                 }}
               >
                 <IconButton size="small" sx={{ color: "green" }}>

@@ -127,6 +127,7 @@ export default function PersistentDrawerLeft() {
   const handleLogout = () => {
     // Remove token from local storage
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     setIsLoggedIn(false);
     navigate('/');
   };

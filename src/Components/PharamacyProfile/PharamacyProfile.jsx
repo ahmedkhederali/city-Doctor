@@ -244,7 +244,7 @@ const PharamacyProfile = () => {
               <PhoneIcon sx={{ color: "green" }} />{" "}
               {/* Green color for phone icon */}
               <Typography variant="body2" color="text.primary" sx={{ ml: 1 }}>
-                {convertToArabicNumerals(pharamacy.phone)}
+                {convertToArabicNumerals(pharamacy?.phone)}
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>

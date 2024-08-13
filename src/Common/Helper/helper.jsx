@@ -46,12 +46,12 @@ export const imageMap = {
   };
 };
 
-export function convertToArabicNumerals(number) {
+export function convertToArabicNumerals(number="") {
   // Define Arabic numeral mapping
   const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
   
   // Convert number to string to handle each digit
-  const numberString = number.toString();
+  const numberString = number?.toString();
   
   // Map each digit to its Arabic numeral
   return numberString.split('').map(digit => arabicNumerals[digit]).join('');

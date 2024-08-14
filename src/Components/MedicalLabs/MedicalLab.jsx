@@ -3,19 +3,25 @@ import {
   Card, CardContent, Typography, CardActionArea,
   TextField, Button, Grid, Container, Box, Rating,
   Accordion, AccordionSummary, AccordionDetails,
-  CircularProgress
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { FaRegFrownOpen } from 'react-icons/fa';
-import { calculateAverageRating } from '../../Common/Helper/helper';
+import { calculateAverageRating, convertToArabicNumerals } from '../../Common/Helper/helper';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {  fetchMedicalLabs } from '../../redux/Actions/medicalLabsActions';
 import { toast } from "react-toastify";
+import { Phone } from '@mui/icons-material';
 
 const MedicalLabs = () => {
   const [nameFilter, setNameFilter] = useState('');
+  const [selectedType, setSelectedType] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -24,8 +30,8 @@ const MedicalLabs = () => {
   const error = useSelector((state) => state.medical_lab.error);
 
   useEffect(() => {
-    dispatch(fetchMedicalLabs()); // Fetch new data
-  }, [dispatch]);
+    dispatch(fetchMedicalLabs(selectedType)); // Fetch new data
+  }, [dispatch, selectedType]);
 
   useEffect(() => {
     if (status === "failed") {
@@ -58,7 +64,9 @@ const MedicalLabs = () => {
       </Box>
     );
   }
-
+  const handleTypeChange = (event) => {
+    setSelectedType(event.target.value);
+  };
   return (
     <Container>
       <h1>المختبرات الطبية</h1>
@@ -70,6 +78,18 @@ const MedicalLabs = () => {
           onChange={(e) => setNameFilter(e.target.value)}
           fullWidth
         />
+        <FormControl fullWidth>
+          <InputLabel>نوع المعمل</InputLabel>
+          <Select
+            value={selectedType}
+            onChange={handleTypeChange}
+            label="نوع المعمل"
+          >
+            <MenuItem value="">الكل</MenuItem>
+            <MenuItem value="medical">معمل طبي</MenuItem>
+            <MenuItem value="central">مركز أشعة</MenuItem>
+          </Select>
+        </FormControl>
       </Box>
       <Grid container spacing={3}>
         {filteredLabs.length > 0 ? (
@@ -91,6 +111,12 @@ const MedicalLabs = () => {
                       <LocationOnIcon color="action" />
                       <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
                         {lab.location}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Phone color="action" />
+                      <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+                        {convertToArabicNumerals(lab.phone)}
                       </Typography>
                     </Box>
                   </CardContent>

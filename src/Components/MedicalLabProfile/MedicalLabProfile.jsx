@@ -30,6 +30,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FaRegFrownOpen } from "react-icons/fa";
 import {
   calculateAverageRating,
+  convertToArabicNumerals,
   translateDayAndTime,
 } from "../../Common/Helper/helper";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
@@ -37,6 +38,7 @@ import { toast } from "react-toastify";
 import { fetchSingleMedicalLab } from "../../redux/Actions/getSindleMedicalLab";
 import { useDispatch, useSelector } from "react-redux";
 import { rateMedicalLabs } from "../../redux/Actions/ratingMedicalLabs";
+import { Phone } from "@mui/icons-material";
 
 const MedicalLabProfile = () => {
   const { id } = useParams(); // Get the lab ID from URL params
@@ -65,6 +67,19 @@ const MedicalLabProfile = () => {
   const handleShowMoreComments = () => {
     setVisibleComments((prev) => prev + 5);
   };
+
+  // Set user's previous rating if available
+  useEffect(() => {
+    if (medicalLabsData && medicalLabsData.ratings && localStorage.getItem("userId")) {
+      const userId = localStorage.getItem("userId");
+      const userRating = medicalLabsData.ratings.find(
+        (rating) => rating.user === userId
+      );
+      if (userRating) {
+        setRating(userRating.rating); // Set the rating state to the user's previous rating
+      }
+    }
+  }, [medicalLabsData, openModal]);
 
   useEffect(() => {
     if (status === "failed") {
@@ -208,7 +223,12 @@ const MedicalLabProfile = () => {
                 {medicalLabsData.location}
               </Typography>
             </Box>
-
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <Phone color="action" />
+              <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+                {convertToArabicNumerals(medicalLabsData.phone)}
+              </Typography>
+            </Box>
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography>ساعات العمل</Typography>

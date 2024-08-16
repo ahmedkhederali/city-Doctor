@@ -30,5 +30,6 @@ export const createComment = (refId, onModel = 'Doctor', comment) => async (disp
     dispatch(fetchSingleCreateCommentsSuccess(response.data));
   } catch (error) {
     dispatch(fetchSingleCreateCommentsFailure(error));
+    throw error.response?.data
   }
 };

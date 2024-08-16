@@ -27,6 +27,7 @@ export const fetchSpecialties = (id) => async (dispatch) => {
     return response.data
   } catch (error) {
     dispatch(fetchSpecialtiesFailure(error));
+    throw error.response?.data
   }
 };
 // actions/doctoBasedonSpecialist.js

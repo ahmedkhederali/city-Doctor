@@ -29,5 +29,6 @@ export const fetchMedicalLabs = (medicalType = '') => async (dispatch) => {
     dispatch(fetchSpecialtiesSuccess(response.data));
   } catch (error) {
     dispatch(fetchSpecialtiesFailure(error.message));
+    throw error.response?.data
   }
 };

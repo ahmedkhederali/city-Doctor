@@ -37,7 +37,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSingleDoctor } from "../../redux/Actions/getSindleDoctor";
 import { fetchSingleDoctorComments } from "../../redux/Actions/getSindleDoctorComments";
-import { translateDayAndTime } from "../../Common/Helper/helper";
+import { removeTokenWhneStatus401, translateDayAndTime } from "../../Common/Helper/helper";
 import { createComment } from "../../redux/Actions/createComment";
 import { AppContext } from "../../contextApi/AppContext";
 import Comment from "../../Common/Comment/Comments";
@@ -75,6 +75,12 @@ const DoctorProfile = () => {
     }
   }, [status, error]);
 
+  
+  useEffect(() => {
+    if (commmentStatus === "failed") {
+      toast.error(`${commentError?.payload?.response?.data?.msg}`);
+    }
+  }, [commmentStatus, commentError]);
   const handleShowMoreComments = () => {
     setVisibleComments((prev) => prev + 5);
   };
@@ -90,14 +96,14 @@ const DoctorProfile = () => {
       return;
     }
 
-    dispatch(createComment(id, "Doctor", comment))
-      .then((res) => {
+    dispatch(createComment(id, "Doctor", comment)).then((res) => {
         toast.success("تم أضافة تعليقك بنجاح");
         setComment(""); // Clear the comment input field
         dispatch(fetchSingleDoctorComments(id)); // Refresh the comments
-      })
-      .catch((err) => {
+      }).catch((err) => {
         toast.error(err.message);
+        removeTokenWhneStatus401(err.status)
+        Number(err.status)===401 && navigate("/login");
       });
   };
 
@@ -124,6 +130,8 @@ const DoctorProfile = () => {
       })
       .catch((err) => {
         toast.error(err.message);
+        removeTokenWhneStatus401(err.status)
+        Number(err.status)===401 && navigate("/login");
       });
   };
   const averageRating = doctor?.ratings?.length

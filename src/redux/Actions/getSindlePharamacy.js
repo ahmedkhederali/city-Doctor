@@ -26,5 +26,6 @@ export const fetchSinglePharamacy = (id) => async (dispatch) => {
     dispatch(fetchSpecialtiesSuccess(response.data));
   } catch (error) {
     dispatch(fetchSpecialtiesFailure(error));
+    throw error.response?.data
   }
 };

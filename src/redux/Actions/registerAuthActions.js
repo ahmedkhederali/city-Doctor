@@ -26,5 +26,6 @@ export const signupAuthAction = (userData) => async (dispatch) => {
     return response.data; // Resolve the promise with the response data
   } catch (error) {
     dispatch(signupFailure(error.response.data));
+    throw error.response?.data
   }
 };

@@ -32,6 +32,7 @@ import { FaRegFrownOpen } from "react-icons/fa";
 import {
   calculateAverageRating,
   convertToArabicNumerals,
+  removeTokenWhneStatus401,
   translateDayAndTime,
 } from "../../Common/Helper/helper";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
@@ -115,6 +116,8 @@ const MedicalLabProfile = () => {
       })
       .catch((err) => {
         toast.error(err.message);
+        removeTokenWhneStatus401(err.status)
+        Number(err.status)===401 && navigate("/login");
       });
   };
 
@@ -153,8 +156,10 @@ const MedicalLabProfile = () => {
         dispatch(fetchSingleMedicalLab(id)); // Refresh the doctor data
       })
       .catch((err) => {
-        console.log("errr",err)
+      
         toast.error(err.message);
+        removeTokenWhneStatus401(err.status)
+        Number(err.status)===401 && navigate("/login");
       });
   };
   // calculate rating
@@ -324,7 +329,7 @@ const MedicalLabProfile = () => {
       )}
 
       {/* Show More Button */}
-      {visibleTests < filteredTests.length && (
+      {visibleTests < filteredTests?.length && (
         <Button onClick={handleShowMore} sx={{ mt: 2 }}>
           عرض المزيد
         </Button>

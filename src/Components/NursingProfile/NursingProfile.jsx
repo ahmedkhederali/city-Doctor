@@ -41,6 +41,7 @@ import { FaRegFrownOpen } from "react-icons/fa";
 import {
   calculateAverageRating,
   convertToArabicNumerals,
+  removeTokenWhneStatus401,
   translateDayAndTime,
 } from "../../Common/Helper/helper";
 import { toast } from "react-toastify";
@@ -52,7 +53,8 @@ import Comment from "../../Common/Comment/Comments";
 import { fetchSingleNursing } from "../../redux/Actions/getSindleNursing";
 import { fetchSingleNursingComments } from "../../redux/Actions/getSindleNursingComments";
 import { rateNursing } from "../../redux/Actions/ratingNursing";
-
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import StarIcon from "@mui/icons-material/Star";
 const NursingProfile = () => {
   const { id } = useParams(); // Get the nurse ID from URL params
   const navigate = useNavigate(); // Initialize useNavigate
@@ -117,6 +119,8 @@ const NursingProfile = () => {
       })
       .catch((err) => {
         toast.error(err.message);
+        removeTokenWhneStatus401(err.status)
+        Number(err.status)===401 && navigate("/login");
       });
   };
 
@@ -155,6 +159,8 @@ const NursingProfile = () => {
       })
       .catch((err) => {
         toast.error(err.message);
+        removeTokenWhneStatus401(err.status)
+        Number(err.status)===401 && navigate("/login");
       });
   };
 
@@ -178,6 +184,8 @@ const NursingProfile = () => {
       })
       .catch((err) => {
         toast.error(err.message);
+        removeTokenWhneStatus401(err.status)
+        Number(err.status)===401 && navigate("/login");
       });
   };
   const averageRating = nrsing?.ratings?.length
@@ -229,7 +237,21 @@ const NursingProfile = () => {
           }}
           onClick={handleOpenModal}
         >
-          تقييم الممرض
+          {rating > 0 ? (
+            <StarIcon
+              sx={{
+                fontSize: 30, // Adjust size as needed
+                color: "#faaf00", // Adjust color as needed
+              }}
+            />
+          ) : (
+            <StarBorderIcon
+              sx={{
+                fontSize: 30, // Adjust size as needed
+                color: "black", // Adjust color as needed
+              }}
+            />
+          )}
         </Typography>
       </Box>
       <Card>

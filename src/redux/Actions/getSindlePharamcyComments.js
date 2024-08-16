@@ -26,5 +26,6 @@ export const fetchSinglePharamcyComments = (id) => async (dispatch) => {
     dispatch(fetchSpecialtiesSuccess(response.data));
   } catch (error) {
     dispatch(fetchSpecialtiesFailure(error));
+    throw error.response?.data
   }
 };

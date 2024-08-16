@@ -32,6 +32,6 @@ export const rateNursing= (id, rating) => async (dispatch) => {
     return response.data;
   } catch (error) {
     dispatch(rateDoctorFailure(error));
-    throw error;
+    throw error.response?.data
   }
 };

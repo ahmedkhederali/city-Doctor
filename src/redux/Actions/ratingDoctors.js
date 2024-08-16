@@ -33,6 +33,6 @@ const token=localStorage.getItem("token")
     return response.data;
   } catch (error) {
     dispatch(rateDoctorFailure(error));
-    throw error;
+    throw error.response?.data
   }
 };

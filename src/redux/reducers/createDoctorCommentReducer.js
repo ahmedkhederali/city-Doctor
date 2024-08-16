@@ -6,8 +6,8 @@ import {
   
   const initialState = {
     doctor: {},
-    status: 'idle',
-    error: null,
+    commmentStatus: 'idle',
+    commentError: null,
   };
   
   const createDoctorCommentReducer = (state = initialState, action) => {
@@ -15,19 +15,19 @@ import {
       case FETCH_SINGLE_CREATE_COMMENTS_REQUEST:
         return {
           ...state,
-          status: 'loading',
+          commmentStatus: 'loading',
         };
       case FETCH_SINGLE_CREATE_COMMENTS_SUCCESS:
         return {
           ...state,
-          status: 'succeeded',
+          commmentStatus: 'succeeded',
           doctor: action.payload,
         };
       case FETCH_SINGLE_CREATE_COMMENTS_FAILURE:
         return {
           ...state,
-          status: 'failed',
-          error: action,
+          commmentStatus: 'failed',
+          commentError: action,
         };
       default:
         return state;

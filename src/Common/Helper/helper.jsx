@@ -86,3 +86,10 @@ export const formatArabicDateTime = (date) => {
   
   return `${day} ${month} ${year} ${hours}:${minutes} ${amPm}`;
 };
+
+export const removeTokenWhneStatus401=(status)=>{
+  if(Number(status)=== 401){
+    localStorage.removeItem("token")
+    localStorage.removeItem("userId")
+  }
+}

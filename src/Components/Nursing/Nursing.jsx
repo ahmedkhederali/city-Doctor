@@ -42,6 +42,7 @@ const Nursing = () => {
   const [nameFilter, setNameFilter] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [genderFilter, setGenderFilter] = useState(""); // State for gender filter
 
   const { nursingData } = useSelector((state) => state.all_nursing);
   const status = useSelector((state) => state.all_nursing.status);
@@ -59,10 +60,12 @@ const Nursing = () => {
 
   // Ensure `nursingData` is an array
   const filteredLabs = Array.isArray(nursingData)
-    ? nursingData.filter((lab) =>
-        lab.name.toLowerCase().includes(nameFilter.toLowerCase())
-      )
-    : [];
+  ? nursingData.filter((nursingPerson) =>
+      nursingPerson.name.toLowerCase().includes(nameFilter.toLowerCase())
+    ).filter((nursingPerson) =>
+      genderFilter === "" || nursingPerson.sex === genderFilter
+    )
+  : [];
   console.log("nursingData", nursingData);
   const handleRating = (ratings) => {
     return ratings?.length ? calculateAverageRating(ratings) : 0;
@@ -98,6 +101,18 @@ const Nursing = () => {
           onChange={(e) => setNameFilter(e.target.value)}
           fullWidth
         />
+        <FormControl fullWidth variant="outlined">
+          <InputLabel>تصفية حسب الجنس</InputLabel>
+          <Select
+            value={genderFilter}
+            onChange={(e) => setGenderFilter(e.target.value)}
+            label="تصفية حسب الجنس"
+          >
+            <MenuItem value="">الكل</MenuItem>
+            <MenuItem value="male">ذكر</MenuItem>
+            <MenuItem value="female">أنثى</MenuItem>
+          </Select>
+        </FormControl>
       </Box>
       <Grid container spacing={3}>
         {filteredLabs.length > 0 ? (

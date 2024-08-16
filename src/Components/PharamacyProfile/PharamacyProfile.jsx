@@ -20,6 +20,7 @@ import { FaRegFrownOpen } from "react-icons/fa";
 import {
   calculateAverageRating,
   convertToArabicNumerals,
+  removeTokenWhneStatus401,
 } from "../../Common/Helper/helper";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -100,6 +101,8 @@ const PharamacyProfile = () => {
       })
       .catch((err) => {
         toast.error(err.message);
+        removeTokenWhneStatus401(err.status)
+        Number(err.status)===401 && navigate("/login");
       });
   };
 
@@ -138,8 +141,9 @@ const PharamacyProfile = () => {
         dispatch(fetchSinglePharamacy(id)); // Refresh the doctor data
       })
       .catch((err) => {
-        console.log("errr", err);
         toast.error(err.message);
+        removeTokenWhneStatus401(err.status)
+        Number(err.status)===401 && navigate("/login");
       });
   };
 

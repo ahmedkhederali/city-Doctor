@@ -105,7 +105,7 @@ const Pharmacies = () => {
                       }}
                     >
                       <Typography gutterBottom variant="h5" component="div">
-                        {lab.name}
+                        صيدلية{" "}{lab.name}
                       </Typography>
                       <Rating
                         value={handleRating(lab.ratings)}

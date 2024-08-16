@@ -132,7 +132,7 @@ export default function PersistentDrawerLeft() {
     navigate('/');
   };
   const drawerItems = [
-    { text: "الأطباء", icon: <LocalHospitalIcon />, link: "/doctors" },
+    { text: "التمريض", icon: <LocalHospitalIcon />, link: "/nursing" },
     { text: "الصيدليات", icon: <LocalPharmacyIcon />, link: "/pharmacies" },
     { text: "المعامل", icon: <BiotechIcon />, link: "/medical-labs" },
   ];

@@ -1,31 +1,30 @@
 import axios from 'axios';
 
-export const RATE_PHARAMACY_REQUEST = 'RATE_PHARAMACY_REQUEST';
-export const RATE_PHARAMACY_SUCCESS = 'RATE_PHARAMACY_SUCCESS';
-export const RATE_PHARAMACY_FAILURE = 'RATE_PHARAMACY_FAILURE';
+export const RATE_NURSING_REQUEST = 'RATE_NURSING_REQUEST';
+export const RATE_NURSING_SUCCESS = 'RATE_NURSING_SUCCESS';
+export const RATE_NURSING_FAILURE = 'RATE_NURSING_FAILURE';
 
 
 export const rateDoctorRequest = () => ({
-  type: RATE_PHARAMACY_REQUEST,
+  type: RATE_NURSING_REQUEST,
 });
 
 export const rateDoctorSuccess = (data) => ({
-  type: RATE_PHARAMACY_SUCCESS,
+  type: RATE_NURSING_SUCCESS,
   payload: data,
 });
 
 export const rateDoctorFailure = (error) => ({
-  type: RATE_PHARAMACY_FAILURE,
+  type: RATE_NURSING_FAILURE,
   payload: error,
 });
 
-export const ratePharamacy= (id, rating) => async (dispatch) => {
+export const rateNursing= (id, rating) => async (dispatch) => {
   try {
-const token=localStorage.getItem("token")
-
+    const token=localStorage.getItem("token")
     dispatch(rateDoctorRequest());
     const response = await axios.post(
-      `${import.meta.env.VITE_API_BASE_URL}/pharmacies/rating/${id}`,
+      `${import.meta.env.VITE_API_BASE_URL}/nursing/rating/${id}`,
       { rating },
       { headers: { BearerToken: token } },
      );

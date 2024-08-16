@@ -4,7 +4,6 @@ export const RATE_MEDICALLABS_REQUEST = 'RATE_MEDICALLABS_REQUEST';
 export const RATE_MEDICALLABS_SUCCESS = 'RATE_MEDICALLABS_SUCCESS';
 export const RATE_MEDICALLABS_FAILURE = 'RATE_MEDICALLABS_FAILURE';
 
-const token=localStorage.getItem("token")
 
 export const rateDoctorRequest = () => ({
   type: RATE_MEDICALLABS_REQUEST,
@@ -22,6 +21,8 @@ export const rateDoctorFailure = (error) => ({
 
 export const rateMedicalLabs = (id, rating) => async (dispatch) => {
   try {
+const token=localStorage.getItem("token")
+
     dispatch(rateDoctorRequest());
     const response = await axios.post(
       `${import.meta.env.VITE_API_BASE_URL}/medicallabs/rating/${id}`,

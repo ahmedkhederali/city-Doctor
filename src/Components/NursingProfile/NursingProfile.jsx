@@ -4,84 +4,101 @@ import {
   CardContent,
   Typography,
   CardActionArea,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   Box,
   Rating,
   Container,
+  Grid,
   Button,
+  TableRow,
+  TableCell,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  Paper,
   CircularProgress,
   Modal,
   Fade,
   Backdrop,
   TextField,
+  Avatar,
 } from "@mui/material";
+import MaleIcon from "@mui/icons-material/Male";
+import FemaleIcon from "@mui/icons-material/Female";
+import {
+  Home as HomeIcon,
+  School as SchoolIcon,
+  Phone as PhoneIcon,
+  Description as DescriptionIcon,
+} from "@mui/icons-material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaRegFrownOpen } from "react-icons/fa";
 import {
   calculateAverageRating,
   convertToArabicNumerals,
+  translateDayAndTime,
 } from "../../Common/Helper/helper";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { ratePharamacy } from "../../redux/Actions/ratingPharamacy";
-import { fetchSinglePharamacy } from "../../redux/Actions/getSindlePharamacy";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-import StarIcon from "@mui/icons-material/Star";
-import Comment from "../../Common/Comment/Comments";
-import { fetchSinglePharamcyComments } from "../../redux/Actions/getSindlePharamcyComments";
+// import { rateNurse } from "../../redux/Actions/ratingNurse";
+import { Phone } from "@mui/icons-material";
 import { createComment } from "../../redux/Actions/createComment";
-import PhoneIcon from "@mui/icons-material/Phone";
+import Comment from "../../Common/Comment/Comments";
+import { fetchSingleNursing } from "../../redux/Actions/getSindleNursing";
+import { fetchSingleNursingComments } from "../../redux/Actions/getSindleNursingComments";
+import { rateNursing } from "../../redux/Actions/ratingNursing";
 
-const PharamacyProfile = () => {
-  const { id } = useParams(); // Get the lab ID from URL params
+const NursingProfile = () => {
+  const { id } = useParams(); // Get the nurse ID from URL params
   const navigate = useNavigate(); // Initialize useNavigate
   const dispatch = useDispatch();
-  const { pharamacy, status, error } = useSelector(
-    (state) => state.single_pharamcy
+  const { nrsing, status, error } = useSelector(
+    (state) => state.single_nursing
   );
-
+  const { comments, commentStatus, commentError } = useSelector(
+    (state) => state.single_nurse_comment
+  );
   const [comment, setComment] = useState("");
+  const [expanded, setExpanded] = useState(false);
   const [visibleComments, setVisibleComments] = useState(5);
   const [openModal, setOpenModal] = useState(false);
   const [rating, setRating] = useState(0);
-  const { comments, commmentStatus, commentError } = useSelector(
-    (state) => state.singlr_pharamcy_comment
-  );
-  // to get MedicalLab Data
+
   useEffect(() => {
-    dispatch(fetchSinglePharamacy(id));
+    dispatch(fetchSingleNursing(id));
   }, [id, dispatch]);
 
-  //   to get Comment of Pharamcy
   useEffect(() => {
-    dispatch(fetchSinglePharamcyComments(id));
+    dispatch(fetchSingleNursingComments(id));
   }, [id, dispatch]);
 
-  // show more Comment
   const handleShowMoreComments = () => {
     setVisibleComments((prev) => prev + 5);
   };
 
-  // Set user's previous rating if available
   useEffect(() => {
-    if (pharamacy && pharamacy.ratings && localStorage.getItem("userId")) {
+    if (nrsing && nrsing.ratings && localStorage.getItem("userId")) {
       const userId = localStorage.getItem("userId");
-      const userRating = pharamacy.ratings.find(
+      const userRating = nrsing.ratings.find(
         (rating) => rating.user === userId
       );
       if (userRating) {
-        setRating(userRating.rating); // Set the rating state to the user's previous rating
+        setRating(userRating.rating);
       }
     }
-  }, [pharamacy, openModal]);
-
+  }, [nrsing, openModal]);
   useEffect(() => {
     if (status === "failed") {
       toast.error(`${error?.payload?.response?.data?.msg}`);
     }
   }, [status, error]);
-  // for create Comment
-  const handleCreatComment = () => {
+
+  const handleCreateComment = () => {
     if (!localStorage.getItem("token")) {
       toast.warning("يجب تسجيل الدخول");
       navigate("/login");
@@ -92,11 +109,11 @@ const PharamacyProfile = () => {
       return;
     }
 
-    dispatch(createComment(id, "Pharmacy", comment))
+    dispatch(createComment(id, "Nursing", comment))
       .then((res) => {
         toast.success("تم أضافة تعليقك بنجاح");
-        setComment(""); // Clear the comment input field
-        dispatch(fetchSinglePharamcyComments(id)); // Refresh the comments
+        setComment("");
+        dispatch(fetchSingleNurseComments(id));
       })
       .catch((err) => {
         toast.error(err.message);
@@ -106,13 +123,13 @@ const PharamacyProfile = () => {
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
-  if (!pharamacy) {
+  if (!nrsing) {
     return (
       <Container>
         <Box textAlign="center" sx={{ width: "100%" }}>
           <FaRegFrownOpen style={{ fontSize: 100, color: "gray" }} />
           <Typography variant="h4" color="gray" sx={{ mt: 2 }}>
-            لم يتم العثور على صيدلية
+            لم يتم العثور على الممرضة
           </Typography>
         </Box>
       </Container>
@@ -130,30 +147,48 @@ const PharamacyProfile = () => {
       return;
     }
 
-    // Dispatch an action to submit the rating
-    dispatch(ratePharamacy(id, rating))
+    dispatch(rateNursing(id, rating))
       .then(() => {
         toast.success("تم أضافة تقييمك بنجاح");
         setOpenModal(false);
-        dispatch(fetchSinglePharamacy(id)); // Refresh the doctor data
+        dispatch(fetchSingleNursing(id));
       })
       .catch((err) => {
-        console.log("errr", err);
         toast.error(err.message);
       });
   };
 
-  // calculate rating
-  const averageRating = pharamacy?.ratings?.length
-    ? calculateAverageRating(pharamacy.ratings)
+  // for create Comment
+  const handleCreatComment = () => {
+    if (!localStorage.getItem("token")) {
+      toast.warning("يجب تسجيل الدخول");
+      navigate("/login");
+      return;
+    }
+    if (comment.trim() === "") {
+      toast.error("يرجى كتابة تعليق قبل الإرسال");
+      return;
+    }
+
+    dispatch(createComment(id, "Nursing", comment))
+      .then((res) => {
+        toast.success("تم أضافة تعليقك بنجاح");
+        setComment(""); // Clear the comment input field
+        dispatch(fetchSingleNursingComments(id)); // Refresh the comments
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+  const averageRating = nrsing?.ratings?.length
+    ? calculateAverageRating(nrsing.ratings)
     : 0;
 
-  if (status === "loading" || !pharamacy) {
+  if (status === "loading" || !nrsing) {
     return (
       <Box
         sx={{
           display: "flex",
-          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
           height: "80vh",
@@ -164,7 +199,12 @@ const PharamacyProfile = () => {
       </Box>
     );
   }
-
+  const changeGenderToAR = (gender) => {
+    if (gender === "male") {
+      return "ذكر";
+    }
+    return "أنثي";
+  };
   return (
     <Container>
       <Box
@@ -174,7 +214,7 @@ const PharamacyProfile = () => {
           alignItems: "center",
         }}
       >
-        <h1> صيدلية {pharamacy.name}</h1>
+        <h1> {nrsing.name}</h1>
         <Typography
           variant="h6"
           sx={{
@@ -189,21 +229,7 @@ const PharamacyProfile = () => {
           }}
           onClick={handleOpenModal}
         >
-          {rating > 0 ? (
-            <StarIcon
-              sx={{
-                fontSize: 30, // Adjust size as needed
-                color: "#faaf00", // Adjust color as needed
-              }}
-            />
-          ) : (
-            <StarBorderIcon
-              sx={{
-                fontSize: 30, // Adjust size as needed
-                color: "black", // Adjust color as needed
-              }}
-            />
-          )}
+          تقييم الممرض
         </Typography>
       </Box>
       <Card>
@@ -217,26 +243,75 @@ const PharamacyProfile = () => {
                 mb: 1,
               }}
             >
-              <Typography gutterBottom variant="h5" component="div">
-                {pharamacy.name}
-              </Typography>
+              <Box sx={{ marginTop: "80px" }}>
+                <Avatar
+                  src={nrsing?.image?.url} // Assuming image URL is stored in nrsing.imageUrl
+                  sx={{
+                    width: 80,
+                    height: 80,
+                    position: "absolute",
+                    top: 0,
+                    left: 16,
+                  }}
+                />
+              </Box>
+
               <Rating value={averageRating} readOnly precision={0.5} />
             </Box>
             <Typography variant="body2" color="text.secondary" paragraph>
-              {pharamacy.medical_desc}
+              {nrsing.descrption}
             </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-              <PhoneIcon sx={{ color: "green" }} />{" "}
-              {/* Green color for phone icon */}
-              <Typography variant="body2" color="text.primary" sx={{ ml: 1 }}>
-                {convertToArabicNumerals(pharamacy?.phone)}
-              </Typography>
-            </Box>
             <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
               <LocationOnIcon color="action" />
               <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
-                {pharamacy.location}
+                {nrsing.address}
               </Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+                {nrsing.sex === "male" ? (
+                    <MaleIcon color="action" />
+                ) : (
+                    <FemaleIcon color="action"  />
+                )}
+                </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+                {changeGenderToAR(nrsing.sex)}
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+              <SchoolIcon color="action" />
+              <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+                {nrsing.degree}
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+              <Phone color="action" />
+              <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+                {convertToArabicNumerals(nrsing.phone)}
+              </Typography>
+            </Box>
+            <Box sx={{ mt: 4 }}>
+              <Typography variant="h6" gutterBottom>
+                المهمات
+              </Typography>
+              {nrsing?.functionality?.map((specialty) => (
+                <Box
+                  key={specialty._id}
+                  sx={{
+                    mr: 1,
+                    mb: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Button variant="contained" color="primary">
+                    {specialty.name}
+                  </Button>
+                </Box>
+              ))}
             </Box>
           </CardContent>
         </CardActionArea>
@@ -298,42 +373,35 @@ const PharamacyProfile = () => {
         }}
       >
         <Fade in={openModal}>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 300,
-              bgcolor: "background.paper",
-              border: "2px solid #fff",
-              boxShadow: 24,
-              p: 4,
-            }}
-          >
+          <Box sx={modalStyle}>
+            <Typography variant="h6" component="h2">
+              تقييم الممرض
+            </Typography>
             <Box
               sx={{
+                mt: 2,
                 display: "flex",
-                flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                gap: 2,
               }}
             >
               <Rating
-                name="doctor-rating"
                 value={rating}
-                onChange={(event, newValue) => setRating(newValue)}
+                onChange={(event, newValue) => {
+                  setRating(newValue);
+                }}
+                precision={0.5}
               />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmitRating}
-                sx={{ mt: 2 }}
-              >
-                إرسال التقييم
-              </Button>
             </Box>
+            <Button
+              onClick={handleSubmitRating}
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mt: 2 }}
+            >
+              إرسال تقييم
+            </Button>
           </Box>
         </Fade>
       </Modal>
@@ -341,4 +409,16 @@ const PharamacyProfile = () => {
   );
 };
 
-export default PharamacyProfile;
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  borderRadius: "8px",
+  boxShadow: 24,
+  p: 4,
+};
+
+export default NursingProfile;

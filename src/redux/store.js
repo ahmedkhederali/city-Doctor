@@ -13,6 +13,11 @@ import medicalLabReducer from './reducers/RatingMedicalLabsReducer';
 import PharamacyReducer from './reducers/pharamacyReducer';
 import singlePharamacyReducer from './reducers/getSinglePharamacyReducer';
 import singlePharamcyCommentsReducer from './reducers/getSinglePharamcyCommentsReducer';
+import singleMedicalLabCommentsReducer from './reducers/getSingleMedicalLabCommentsReducer';
+import nursingReducer from './reducers/nursingReducer';
+import singleNursingReducer from './reducers/getSingleNursingReducer';
+import singleNursingCommentsReducer from './reducers/getSingleNursingCommentsReducer';
+import nursingRateReducer from './reducers/RatingNursingReducer';
 
 
 export const store = configureStore({
@@ -29,6 +34,10 @@ export const store = configureStore({
     rate_medicallab:medicalLabReducer,
     pharamacy:PharamacyReducer,
     single_pharamcy:singlePharamacyReducer,
-    singlr_pharamcy_comment :singlePharamcyCommentsReducer
+    singlr_pharamcy_comment :singlePharamcyCommentsReducer,
+    singlr_medicalLab_comment:singleMedicalLabCommentsReducer,
+    all_nursing:nursingReducer,
+    single_nursing:singleNursingReducer,
+    single_nurse_comment:singleNursingCommentsReducer,
   },
 });

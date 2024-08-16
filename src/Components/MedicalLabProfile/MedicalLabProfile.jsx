@@ -23,6 +23,7 @@ import {
   Modal,
   Fade,
   Backdrop,
+  TextField,
 } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -39,6 +40,9 @@ import { fetchSingleMedicalLab } from "../../redux/Actions/getSindleMedicalLab";
 import { useDispatch, useSelector } from "react-redux";
 import { rateMedicalLabs } from "../../redux/Actions/ratingMedicalLabs";
 import { Phone } from "@mui/icons-material";
+import { createComment } from "../../redux/Actions/createComment";
+import { fetchSingleMedicalLabComments } from "../../redux/Actions/getSindleMedicalLabComments";
+import Comment from "../../Common/Comment/Comments";
 
 const MedicalLabProfile = () => {
   const { id } = useParams(); // Get the lab ID from URL params
@@ -47,21 +51,25 @@ const MedicalLabProfile = () => {
   const { medicalLabsData, status, error } = useSelector(
     (state) => state.singlr_medicalLab
   );
-
+  const { comments, commmentStatus, commentError } = useSelector(
+    (state) => state.singlr_medicalLab_comment
+  );
   const [comment, setComment] = useState("");
   const [expanded, setExpanded] = useState(false);
   const [visibleComments, setVisibleComments] = useState(5);
   const [openModal, setOpenModal] = useState(false);
   const [rating, setRating] = useState(0);
+  const [visibleTests, setVisibleTests] = useState(1); // Initially show 5 items
+  const [searchQuery, setSearchQuery] = useState(''); // For search functionality
   // to get MedicalLab Data
   useEffect(() => {
     dispatch(fetchSingleMedicalLab(id));
   }, [id, dispatch]);
 
   //to get Comment of Medical Lab
-  // useEffect(() => {
-  //   dispatch(fetchSingleDoctorComments(id));
-  // }, [id, dispatch]);
+  useEffect(() => {
+    dispatch(fetchSingleMedicalLabComments(id));
+  }, [id, dispatch]);
 
   // show more Comment
   const handleShowMoreComments = () => {
@@ -86,28 +94,29 @@ const MedicalLabProfile = () => {
       toast.error(`${error?.payload?.response?.data?.msg}`);
     }
   }, [status, error]);
-  // for create Comment
-  // const handleCreatComment = () => {
-  //   if (!localStorage.getItem("token")) {
-  //     toast.warning("يجب تسجيل الدخول");
-  //     navigate("/login");
-  //     return;
-  //   }
-  //   if (comment.trim() === "") {
-  //     toast.error("يرجى كتابة تعليق قبل الإرسال");
-  //     return;
-  //   }
 
-  //   dispatch(createComment(id, "Doctor", comment))
-  //     .then((res) => {
-  //       toast.success("تم أضافة تعليقك بنجاح");
-  //       setComment(""); // Clear the comment input field
-  //       dispatch(fetchSingleDoctorComments(id)); // Refresh the comments
-  //     })
-  //     .catch((err) => {
-  //       toast.error(err.message);
-  //     });
-  // };
+  // for create Comment
+  const handleCreatComment = () => {
+    if (!localStorage.getItem("token")) {
+      toast.warning("يجب تسجيل الدخول");
+      navigate("/login");
+      return;
+    }
+    if (comment.trim() === "") {
+      toast.error("يرجى كتابة تعليق قبل الإرسال");
+      return;
+    }
+
+    dispatch(createComment(id, "MedicalLab", comment))
+      .then((res) => {
+        toast.success("تم أضافة تعليقك بنجاح");
+        setComment(""); // Clear the comment input field
+        dispatch(fetchSingleMedicalLabComments(id)); // Refresh the comments
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
@@ -169,7 +178,15 @@ const MedicalLabProfile = () => {
       </Box>
     );
   }
+  // Filtered tests based on search query
+  const filteredTests = medicalLabsData.medicaltest?.filter(test =>
+    test.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
+  // Show more items handler
+  const handleShowMore = () => {
+    setVisibleTests(prevVisibleTests => prevVisibleTests + 5);
+  };
   return (
     <Container>
       <Box 
@@ -271,28 +288,93 @@ const MedicalLabProfile = () => {
       </Card>
       {/* Medical Tests Section */}
       <Box sx={{ mt: 4 }}>
-        <Typography variant="h6" gutterBottom>
-          التحاليل الطبية المتاحة
+      <Typography variant="h6" gutterBottom>
+        التحاليل الطبية المتاحة
+      </Typography>
+
+      {/* Search Field */}
+      <TextField
+        label="بحث"
+        variant="outlined"
+        fullWidth
+        sx={{ mb: 2 }}
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+
+      {/* Display Accordions */}
+      {filteredTests?.length > 0 ? (
+        filteredTests.slice(0, visibleTests).map((test, index) => (
+          <Accordion key={index}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <LocalPharmacyIcon sx={{ mr: 1, color: "#1976d2" }} />
+                <Typography>{test.name}</Typography>
+              </Box>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>{test.desc}</Typography>
+            </AccordionDetails>
+          </Accordion>
+        ))
+      ) : (
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          لا توجد فحوصات متاحة.
         </Typography>
-        {medicalLabsData.medicaltest?.length > 0 ? (
-          medicalLabsData.medicaltest.map((test, index) => (
-            <Accordion key={index}>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <LocalPharmacyIcon sx={{ mr: 1, color: "#1976d2" }} />
-                  <Typography>{test.name}</Typography>
-                </Box>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>{test.desc}</Typography>
-              </AccordionDetails>
-            </Accordion>
-          ))
-        ) : (
-          <Typography variant="body2" color="text.secondary" sx={{mb:1}}>
-            لا توجد فحوصات متاحة.
-          </Typography>
-        )}
+      )}
+
+      {/* Show More Button */}
+      {visibleTests < filteredTests.length && (
+        <Button onClick={handleShowMore} sx={{ mt: 2 }}>
+          عرض المزيد
+        </Button>
+      )}
+    </Box>
+          {/* Comment Section */}
+          <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+          التعليقات
+        </Typography>
+      </Box>
+      {comments?.length > 0 ? (
+        comments
+          .slice(0, visibleComments)
+          .map((comment) => <Comment key={comment._id} comment={comment} />)
+      ) : (
+        <Typography variant="body1" color="textSecondary" sx={{ mb: 1 }}>
+          لا توجد تعليقات
+        </Typography>
+      )}
+
+      {comments.length > visibleComments && (
+        <Button onClick={handleShowMoreComments} variant="text">
+          عرض المزيد
+        </Button>
+      )}
+
+      <Box sx={{ mb: 2 }}>
+        <TextField
+          fullWidth
+          multiline
+          rows={1}
+          variant="outlined"
+          label="اكتب تعليقك هنا"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleCreatComment}
+          sx={{ mt: 1 }}
+        >
+          أضف تعليق
+        </Button>
       </Box>
       <Modal
             open={openModal}
@@ -342,7 +424,8 @@ const MedicalLabProfile = () => {
                 </Box>
               </Box>
             </Fade>
-          </Modal>
+      </Modal>
+
     </Container>
   );
 };

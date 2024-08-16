@@ -5,6 +5,14 @@ import image4 from "../../assets/nfsi.jfif";
 import image5 from "../../assets/nsa.jfif";
 import image6 from "../../assets/mokh.jfif";
 import image7 from "../../assets/anf.jfif";
+import image8 from "../../assets/alagtbi3i.jpg";
+import image9 from "../../assets/albwaw3ia.jpg";
+import image10 from "../../assets/btnaa.jpg";
+import image12 from "../../assets/haknmahgri.jpg";
+import image11 from "../../assets/esbatmla3b.webp";
+
+
+
 // Map image imports to indices
 export const imageMap = {
     0: image1,
@@ -13,7 +21,13 @@ export const imageMap = {
     3: image4,
     4: image5,
     5: image6,
-    6: image7
+    6: image7,
+    7:image8,
+    8:image9,
+    9:image10,
+    10:image11,
+    11:image12,
+
   };
 
   export const calculateAverageRating = (ratings) => {

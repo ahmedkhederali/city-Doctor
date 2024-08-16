@@ -34,7 +34,7 @@ export default function SignUp() {
       }
     } catch (error) {
       // Handle the error by showing a toaster with the error message
-      toast.error(error?.response?.data?.msg || 'حدث خطأ');
+      toast.error(error?.msg || 'حدث خطأ');
     }
   };
 

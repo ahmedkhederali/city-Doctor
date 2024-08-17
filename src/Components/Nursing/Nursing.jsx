@@ -18,6 +18,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Pagination,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { FaRegFrownOpen } from "react-icons/fa";
@@ -43,21 +44,25 @@ const Nursing = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [genderFilter, setGenderFilter] = useState(""); // State for gender filter
+  const [page,setPage]=useState(1)
 
   const { nursingData } = useSelector((state) => state.all_nursing);
   const status = useSelector((state) => state.all_nursing.status);
   const error = useSelector((state) => state.all_nursing.error);
 
   useEffect(() => {
-    dispatch(fetchNursings()); // Fetch new data
-  }, [dispatch]);
+    dispatch(fetchNursings(page)); // Fetch new data
+  }, [dispatch,page]);
 
   useEffect(() => {
     if (status === "failed") {
       toast.error(`${error?.payload?.response?.data?.msg}`);
     }
   }, [status, error]);
-
+  // change page in pagination  
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
   // Ensure `nursingData` is an array
   const filteredLabs = Array.isArray(nursingData)
   ? nursingData.filter((nursingPerson) =>
@@ -258,6 +263,14 @@ const Nursing = () => {
           </Box>
         )}
       </Grid>
+      <Box mt={2} display="flex" justifyContent="center">
+        <Pagination 
+          count={nursingData?.totalPages} 
+          page={nursingData?.currentPage} 
+          onChange={handlePageChange} 
+          color="primary" 
+        />
+      </Box>
     </Container>
   );
 };

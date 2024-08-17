@@ -11,33 +11,30 @@ import {
   Rating,
   IconButton,
   Badge,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  TextField,
-  InputAdornment,
   CircularProgress,
+  Stack,
+  Pagination,
+  InputAdornment,
+  TextField,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { clearDoctors, fetchSpecialties } from "../../redux/Actions/doctoBasedonSpecialist";
+import {
+  clearDoctors,
+  fetchSpecialties,
+} from "../../redux/Actions/doctoBasedonSpecialist";
 import { AppContext } from "../../contextApi/AppContext";
 import {
   FaMapMarkerAlt,
   FaMoneyBillWave,
   FaPhone,
   FaRegFrownOpen,
-  FaChevronDown, // Icon for accordion
 } from "react-icons/fa";
 import { MdOutlineAccessTime } from "react-icons/md";
-import { calculateAverageRating, convertToArabicNumerals, translateDayAndTime } from "../../Common/Helper/helper";
+import {
+  calculateAverageRating,
+  convertToArabicNumerals,
+} from "../../Common/Helper/helper";
 
 const SpecialistDoctor = () => {
   const { id } = useParams(); // Get the specialty ID from URL parameters
@@ -45,19 +42,20 @@ const SpecialistDoctor = () => {
   const navigate = useNavigate();
   const { drawerFWidth } = useContext(AppContext);
 
-  const { doctors, specialistName } = useSelector(
+  const { doctors, specialistName, totalPages, currentPage } = useSelector(
     (state) => state.doctor_specfic.items
   );
   const status = useSelector((state) => state.doctor_specfic.status);
   const error = useSelector((state) => state.doctor_specfic.error);
-  const [expanded, setExpanded] = useState(false); // Track accordion expansion
 
+  const [expanded, setExpanded] = useState(false); // Track accordion expansion
   const [searchQuery, setSearchQuery] = useState(""); // State to manage the search query
+  const [page, setPage] = useState(1); // State to track the current page
 
   useEffect(() => {
     dispatch(clearDoctors()); // Clear previous doctors data
-    dispatch(fetchSpecialties(id)); // Dispatch the action to fetch doctors based on specialty ID
-  }, [id, dispatch]);
+    dispatch(fetchSpecialties(id, page)); // Dispatch the action to fetch doctors based on specialty ID and page number
+  }, [id, dispatch, page]);
 
   useEffect(() => {
     if (status === "failed") {
@@ -69,13 +67,16 @@ const SpecialistDoctor = () => {
   const filteredDoctors = doctors?.filter((doctor) =>
     doctor.doc_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
- const handelRating= (ratings)=>{ 
-  const averageRating = ratings?.length
-  ? calculateAverageRating(ratings)
-  : 0;
-  return averageRating;
-}
- 
+
+  const handleRating = (ratings) => {
+    const averageRating = ratings?.length ? calculateAverageRating(ratings) : 0;
+    return averageRating;
+  };
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
   if (status === "loading") {
     return (
       <Box
@@ -84,7 +85,7 @@ const SpecialistDoctor = () => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          height: "80vh", // Adjust as needed to center vertically
+          height: "80vh",
           textAlign: "center",
         }}
       >
@@ -92,7 +93,7 @@ const SpecialistDoctor = () => {
       </Box>
     );
   }
-console.log("filteredDoctors",filteredDoctors)
+
   return (
     <Box
       sx={{
@@ -103,10 +104,9 @@ console.log("filteredDoctors",filteredDoctors)
     >
       <Box display="flex" flexDirection="column" mb={2}>
         <Typography variant="h4" gutterBottom color="gray">
-          الأطباء المتخصصون قسم {specialistName} 
-          {/* <Badge badgeContent={filteredDoctors.length} color="primary" sx={{ marginRight: 1 }} /> */}
+          الأطباء المتخصصون قسم {specialistName}
         </Typography>
-        
+
         {/* Search Bar */}
         <TextField
           label="بحث عن الطبيب"
@@ -131,14 +131,14 @@ console.log("filteredDoctors",filteredDoctors)
             <Grid item xs={12} sm={6} md={4} key={doctor._id}>
               <Card
                 sx={{
-                  width: "100%", // Full width
-                  minHeight: 330, // Set minimum width for the card
+                  width: "100%",
+                  minHeight: 330,
                   p: 2,
-                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)", // Add box shadow
-                  borderRadius: 2, // Optional: Add border radius
+                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                  borderRadius: 2,
                   cursor: "pointer",
                 }}
-                onClick={() => navigate(`/doctor_profile/${doctor._id}`)} // Redirect on click
+                onClick={() => navigate(`/doctor_profile/${doctor._id}`)}
               >
                 <Box sx={{ display: "flex" }}>
                   <CardMedia
@@ -149,9 +149,7 @@ console.log("filteredDoctors",filteredDoctors)
                       borderRadius: "50%",
                       objectFit: "cover",
                     }}
-                    image={
-                      doctor.doctor_img?.url || "default-doctor-image.jpg"
-                    }
+                    image={doctor.doctor_img?.url || "default-doctor-image.jpg"}
                     alt={doctor.doc_name}
                   />
                   <CardContent sx={{ flexGrow: 1 }}>
@@ -159,91 +157,51 @@ console.log("filteredDoctors",filteredDoctors)
                       variant="h6"
                       sx={{
                         fontWeight: "bold",
-                        color: "rgb(0, 112, 205)", // Set name color
-                        fontSize: 18, // Increase font size
+                        color: "rgb(0, 112, 205)",
+                        fontSize: 18,
                       }}
                     >
                       {doctor.doc_name}
                     </Typography>
-                    {/* <Rating
-                      value={doctor.rating}
+                    <Rating
+                      value={handleRating(doctor.ratings)}
                       readOnly
                       precision={0.5}
-                      sx={{ mt: 1 }}
-                    /> */}
-                      <Rating value={handelRating(doctor.ratings)} readOnly precision={0.5} />
-
+                    />
                     <Typography
                       variant="body2"
-                      sx={{ fontSize: 16, fontWeight: 500 }} // Increase font size and weight
+                      sx={{ fontSize: 16, fontWeight: 500 }}
                       color="textSecondary"
                     >
                       {doctor.small_desc?.length > 100
                         ? `${doctor.small_desc.slice(0, 100)}...`
                         : doctor.small_desc}
                     </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        mt: 1,
-                      }}
-                    >
-                      <IconButton
-                        size="small"
-                        sx={{ color: "red" }} // Set icon color
-                      >
+                    <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                      <IconButton size="small" sx={{ color: "red" }}>
                         <FaMapMarkerAlt />
                       </IconButton>
-                      <Typography variant="body2">
-                        {doctor.location}
-                      </Typography>
+                      <Typography variant="body2">{doctor.location}</Typography>
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        mt: 1,
-                      }}
-                    >
-                      <IconButton
-                        size="small"
-                        sx={{ color: "green" }} // Set icon color
-                      >
+                    <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                      <IconButton size="small" sx={{ color: "green" }}>
                         <FaPhone />
                       </IconButton>
                       <Typography variant="body2">
                         {convertToArabicNumerals(doctor.phone)}
                       </Typography>
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        mt: 1,
-                      }}
-                    >
-                      <IconButton
-                        size="small"
-                        sx={{ color: "blue" }} // Set icon color
-                      >
+                    <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                      <IconButton size="small" sx={{ color: "blue" }}>
                         <FaMoneyBillWave />
                       </IconButton>
                       <Typography variant="body2">
-                        السعر: {convertToArabicNumerals(doctor.detection_price)} جنيه
+                        السعر: {convertToArabicNumerals(doctor.detection_price)}{" "}
+                        جنيه
                       </Typography>
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        mt: 1,
-                      }}
-                    >
-                      <IconButton
-                        size="small"
-                        sx={{ color: "purple" }} // Set icon color
-                      >
+                    <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                      <IconButton size="small" sx={{ color: "purple" }}>
                         <MdOutlineAccessTime />
                       </IconButton>
                       <Typography variant="body2">
@@ -258,21 +216,39 @@ console.log("filteredDoctors",filteredDoctors)
         </Grid>
       ) : (
         <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "60vh",
-          }}
-        >
-          <Box textAlign="center">
-            <FaRegFrownOpen style={{ fontSize: 100, color: "gray" }} />
-            <Typography variant="h4" color="gray" sx={{ mt: 2 }}>
-              لا يوجد أطباء في هذا التخصص
-            </Typography>
-          </Box>
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "60vh",
+        }}
+      >
+        <Box textAlign="center">
+          <FaRegFrownOpen style={{ fontSize: 100, color: "gray" }} />
+          <Typography variant="h4" color="gray" sx={{ mt: 2 }}>
+            لا يوجد أطباء في هذا التخصص
+          </Typography>
         </Box>
+      </Box>
       )}
+
+      {/* Pagination Controls */}
+      <Stack
+        spacing={2}
+        sx={{
+          display: "flex",
+          justifyContent: "center", // Centers the pagination horizontally
+          alignItems: "center", // Centers the pagination items vertically (optional)
+          mt: 4,
+        }}
+      >
+        <Pagination
+          count={totalPages}
+          page={page}
+          onChange={handlePageChange}
+          color="primary"
+        />
+      </Stack>
     </Box>
   );
 };

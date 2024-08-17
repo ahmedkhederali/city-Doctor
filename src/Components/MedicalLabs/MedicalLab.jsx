@@ -7,7 +7,8 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  Pagination
 } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -28,10 +29,10 @@ const MedicalLabs = () => {
   const { medicalLabsData } = useSelector((state) => state.medical_lab);
   const status = useSelector((state) => state.medical_lab.status);
   const error = useSelector((state) => state.medical_lab.error);
-
+  const [page,setPage]=useState(1)
   useEffect(() => {
-    dispatch(fetchMedicalLabs(selectedType)); // Fetch new data
-  }, [dispatch, selectedType]);
+    dispatch(fetchMedicalLabs(selectedType,page)); // Fetch new data
+  }, [dispatch, selectedType,page]);
 
   useEffect(() => {
     if (status === "failed") {
@@ -40,8 +41,8 @@ const MedicalLabs = () => {
   }, [status, error]);
 
   // Ensure `medicalLabsData` is an array
-  const filteredLabs = Array.isArray(medicalLabsData) 
-    ? medicalLabsData.filter(lab => lab.name.toLowerCase().includes(nameFilter.toLowerCase())) 
+  const filteredLabs = Array.isArray(medicalLabsData?.medicalLabs) 
+    ? medicalLabsData?.medicalLabs.filter(lab => lab.name.toLowerCase().includes(nameFilter.toLowerCase())) 
     : [];
 
   const handleRating = (ratings) => {
@@ -66,6 +67,10 @@ const MedicalLabs = () => {
   }
   const handleTypeChange = (event) => {
     setSelectedType(event.target.value);
+  };
+  // change page in pagination  
+  const handlePageChange = (event, value) => {
+    setPage(value);
   };
   return (
     <Container>
@@ -142,6 +147,14 @@ const MedicalLabs = () => {
           </Box>
         )}
       </Grid>
+      <Box mt={2} display="flex" justifyContent="center">
+        <Pagination 
+          count={medicalLabsData?.totalPages} 
+          page={medicalLabsData?.currentPage} 
+          onChange={handlePageChange} 
+          color="primary" 
+        />
+      </Box>
     </Container>
   );
 };

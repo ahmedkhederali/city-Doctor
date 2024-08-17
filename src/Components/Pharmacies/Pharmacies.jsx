@@ -14,6 +14,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   CircularProgress,
+  Pagination,
 } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -36,10 +37,11 @@ const Pharmacies = () => {
   const { pharamacy } = useSelector((state) => state.pharamacy);
   const status = useSelector((state) => state.pharamacy.status);
   const error = useSelector((state) => state.pharamacy.error);
+  const [page,setPage]=useState(1)
 
   useEffect(() => {
-    dispatch(fetchPharamacy()); // Fetch new data
-  }, [dispatch]);
+    dispatch(fetchPharamacy(page)); // Fetch new data
+  }, [dispatch,page]);
   useEffect(() => {
     if (status === "failed") {
       toast.error(`${error?.payload?.response?.data?.msg}`);
@@ -47,8 +49,8 @@ const Pharmacies = () => {
   }, [status, error]);
 
   // Ensure `pharamacy` is an array
-  const filteredLabs = Array.isArray(pharamacy)
-    ? pharamacy.filter((lab) =>
+  const filteredLabs = Array.isArray(pharamacy?.pharmacies)
+    ? pharamacy?.pharmacies?.filter((lab) =>
         lab.name.toLowerCase().includes(nameFilter.toLowerCase())
       )
     : [];
@@ -56,7 +58,10 @@ const Pharmacies = () => {
   const handleRating = (ratings) => {
     return ratings?.length ? calculateAverageRating(ratings) : 0;
   };
-
+  // change page in pagination  
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
   if (status === "loading") {
     return (
       <Box
@@ -166,6 +171,14 @@ const Pharmacies = () => {
           </Box>
         )}
       </Grid>
+      <Box mt={2} display="flex" justifyContent="center">
+        <Pagination 
+          count={pharamacy?.totalPages} 
+          page={pharamacy?.currentPage} 
+          onChange={handlePageChange} 
+          color="primary" 
+        />
+      </Box>
     </Container>
   );
 };

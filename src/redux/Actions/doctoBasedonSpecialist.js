@@ -19,10 +19,10 @@ export const fetchSpecialtiesFailure = (error) => ({
   payload: error
 });
 
-export const fetchSpecialties = (id) => async (dispatch) => {
+export const fetchSpecialties = (id,page) => async (dispatch) => {
   dispatch(fetchSpecialtiesRequest());
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/doctors/specialty/${id}`);
+    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/doctors/specialty/${id}?page=${page}`);
     dispatch(fetchSpecialtiesSuccess(response.data));
     return response.data
   } catch (error) {

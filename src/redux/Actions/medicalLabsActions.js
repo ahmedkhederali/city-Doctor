@@ -19,12 +19,12 @@ export const fetchSpecialtiesFailure = (error) => ({
   payload: error
 });
 
-export const fetchMedicalLabs = (medicalType = '') => async (dispatch) => {
+export const fetchMedicalLabs = (medicalType = '',page) => async (dispatch) => {
   dispatch(fetchSpecialtiesRequest());
   try {
     // Pass medicalType as a query parameter
     const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/medicallabs`, {
-      params: { type: medicalType }
+      params: { type: medicalType,page }
     });
     dispatch(fetchSpecialtiesSuccess(response.data));
   } catch (error) {

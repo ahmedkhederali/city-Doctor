@@ -10,9 +10,21 @@ import image9 from "../../assets/albwaw3ia.jpg";
 import image10 from "../../assets/btnaa.jpg";
 import image12 from "../../assets/haknmahgri.jpg";
 import image11 from "../../assets/esbatmla3b.webp";
+import { jwtDecode } from "jwt-decode";
 
+//Decode the Token and Get User Role
+export const getUserRole = () => {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
 
-
+  try {
+    const decodedToken = jwtDecode(token);
+    return decodedToken.role; // Assuming the role is stored in the `role` field
+  } catch (error) {
+    console.error("Invalid token", error);
+    return null;
+  }
+};
 // Map image imports to indices
 export const imageMap = {
     0: image1,

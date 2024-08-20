@@ -18,6 +18,10 @@ import nursingReducer from './reducers/nursingReducer';
 import singleNursingReducer from './reducers/getSingleNursingReducer';
 import singleNursingCommentsReducer from './reducers/getSingleNursingCommentsReducer';
 import nursingRateReducer from './reducers/RatingNursingReducer';
+import adminDashboardTotalReducer from './reducers/adminDashboardTotalReducer';
+import adminDashboardTotalDocReducer from './reducers/adminDashboardTotalDocReducer';
+import adminDashboardTotalNursingReducer from './reducers/adminDashboardTotalNursingReducer';
+import adminDashboardTotalMedicalReducer from './reducers/adminDashboardTotalMedicalReducer';
 
 
 export const store = configureStore({
@@ -39,5 +43,9 @@ export const store = configureStore({
     all_nursing:nursingReducer,
     single_nursing:singleNursingReducer,
     single_nurse_comment:singleNursingCommentsReducer,
+    admin_dashboard:adminDashboardTotalReducer,
+    admin_dashboard_doc:adminDashboardTotalDocReducer,
+    admin_nursing:adminDashboardTotalNursingReducer,
+    admin_medical:adminDashboardTotalMedicalReducer
   },
 });

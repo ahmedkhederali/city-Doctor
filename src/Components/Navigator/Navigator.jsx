@@ -24,7 +24,10 @@ import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 import BiotechIcon from "@mui/icons-material/Biotech";
 import { Outlet, Link as RouterLink } from "react-router-dom";
 import { Avatar, Menu, MenuItem } from "@mui/material";
-
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import AddIcon from "@mui/icons-material/Add";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import { getUserRole } from "../../Common/Helper/helper";
 const drawerWidth = 240;
 const miniDrawerWidth = 60;
 
@@ -88,6 +91,7 @@ export default function PersistentDrawerLeft() {
   const { drawerFWidth, setDrawerFWidth } = React.useContext(AppContext);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [userRole, setUserRole] = React.useState(""); // Add state to manage user role
 
   React.useEffect(() => {
     setOpen(!isMobile);
@@ -99,6 +103,8 @@ export default function PersistentDrawerLeft() {
     const token = localStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
+      const tokenDate=getUserRole()
+      setUserRole(tokenDate)
     } else {
       setIsLoggedIn(false);
     }
@@ -131,7 +137,17 @@ export default function PersistentDrawerLeft() {
     setIsLoggedIn(false);
     navigate('/');
   };
-  const drawerItems = [
+  const drawerItems = userRole === "admin" ? [
+    { text: "لوحة التحكم", icon: <DashboardIcon />, link: "/admin-dashboard" },
+    { text: "إضافة دكتور", icon: <AddIcon />, link: "/add-doctor" },
+    { text: "عرض جميع الدكاتره", icon: <ListAltIcon />, link: "/view-doctors" },
+    { text: "إضافة ممرض", icon: <AddIcon />, link: "/add-nurse" },
+    { text: "عرض جميع الممرضين", icon: <ListAltIcon />, link: "/view-nurses" },
+    { text: "إضافة معمل", icon: <AddIcon />, link: "/add-lab" },
+    { text: "عرض جميع المعامل", icon: <ListAltIcon />, link: "/view-labs" },
+    { text: "إضافة صيدلية", icon: <AddIcon />, link: "/add-pharmacy" },
+    { text: "عرض جميع الصيدليات", icon: <ListAltIcon />, link: "/view-pharmacies" },
+  ] : [
     { text: "التمريض", icon: <LocalHospitalIcon />, link: "/nursing" },
     { text: "الصيدليات", icon: <LocalPharmacyIcon />, link: "/pharmacies" },
     { text: "المعامل", icon: <BiotechIcon />, link: "/medical-labs" },

@@ -18,6 +18,7 @@ import { loginSchema } from '../../Services/Validation/validationSchema'; // Imp
 import { loginAuthActions } from "../../redux/Actions/loginAuthActions"
 import { useDispatch } from 'react-redux';
 import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
 
 export default function SignIn() {
   const navigate = useNavigate(); // Initialize useNavigate
@@ -29,10 +30,18 @@ export default function SignIn() {
       const res=await dispatch(loginAuthActions(values.email, values.password));
       if(res.accessToken){
         toast.success('تم تسجيل الدخول بنجاح');
-      navigate('/'); // Redirect to the desired route after login
-      localStorage.setItem("token",res.accessToken)
-      localStorage.setItem("userId",res.user._id)
-
+        navigate('/'); // Redirect to the desired route after login
+        localStorage.setItem("token",res.accessToken)
+        localStorage.setItem("userId",res.user._id)
+        const decodedToken = jwtDecode(res.accessToken); 
+        // Check the role and redirect accordingly
+      if (decodedToken.role === 'admin') {
+        toast.success('تم تسجيل الدخول بنجاح كمسؤول');
+        navigate('/admin-dashboard'); // Redirect to admin dashboard
+      } else {
+        toast.success('تم تسجيل الدخول بنجاح');
+        navigate('/'); // Redirect to the user home page
+      }     
       }
     } catch (error) {
       // Handle the error by showing a toaster with the error message

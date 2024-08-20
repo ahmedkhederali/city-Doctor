@@ -14,7 +14,8 @@ import MedicalLabProfile from './Components/MedicalLabProfile/MedicalLabProfile'
 import PharamacyProfile from './Components/PharamacyProfile/PharamacyProfile';
 import Nursing from './Components/Nursing/Nursing';
 import NursingProfile from './Components/NursingProfile/NursingProfile';
-
+import Dashboard from './Components/Admin/Dashboard/Dashboard';
+import ProtectedRoute from './Common/ProtectedRoute/ProtectedRoute'; 
 const App = () => {
   return (
     <Router>
@@ -29,7 +30,12 @@ const App = () => {
           <Route path="/medical_profile/:id" element={<MedicalLabProfile/>} exact />
           <Route path="/pharamcy_profile/:id" element={<PharamacyProfile/>} exact />
           <Route path="/nursing_profile/:id" element={<NursingProfile/>} exact />
-
+          {/* admin Routes */}
+          <Route 
+            path="/admin-dashboard" 
+            element={<ProtectedRoute element={<Dashboard />} allowedRoles={['admin']} />} 
+            exact 
+          />
         </Route>
         <Route path="/login" element={<SignIn />} exact/>
         <Route path="/signup" element={<SignUp />} exact/>

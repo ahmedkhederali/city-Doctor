@@ -16,6 +16,10 @@ import Nursing from './Components/Nursing/Nursing';
 import NursingProfile from './Components/NursingProfile/NursingProfile';
 import Dashboard from './Components/Admin/Dashboard/Dashboard';
 import ProtectedRoute from './Common/ProtectedRoute/ProtectedRoute'; 
+import GetAllDoctors from './Components/Admin/Doctors/GetAllDoctors';
+import GetAllMedical from './Components/Admin/MedicalLabs/GetAllMedical';
+import GetAllNirsing from './Components/Admin/Nursing/GetAllNirsing';
+import GetAllPharamcy from './Components/Admin/Pharmacy/GetAllPharamcy';
 const App = () => {
   return (
     <Router>
@@ -34,6 +38,26 @@ const App = () => {
           <Route 
             path="/admin-dashboard" 
             element={<ProtectedRoute element={<Dashboard />} allowedRoles={['admin']} />} 
+            exact 
+          />
+          <Route 
+            path="/view-doctors" 
+            element={<ProtectedRoute element={<GetAllDoctors />} allowedRoles={['admin']} />} 
+            exact 
+          />
+          <Route 
+            path="/view-labs" 
+            element={<ProtectedRoute element={<GetAllMedical />} allowedRoles={['admin']} />} 
+            exact 
+          />
+          <Route 
+            path="/view-pharmacies" 
+            element={<ProtectedRoute element={<GetAllPharamcy />} allowedRoles={['admin']} />} 
+            exact 
+          />
+          <Route 
+            path="/view-nurses" 
+            element={<ProtectedRoute element={<GetAllNirsing />} allowedRoles={['admin']} />} 
             exact 
           />
         </Route>

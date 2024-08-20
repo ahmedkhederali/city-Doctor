@@ -25,6 +25,11 @@ export const getUserRole = () => {
     return null;
   }
 };
+// Utility function to convert numbers to Arabic numerals
+export const convertDecimalToArabicNumerals = (number=0) => {
+  const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  return number.toString().split('').map(num => arabicNumerals[num] || num).join('');
+};
 // Map image imports to indices
 export const imageMap = {
     0: image1,

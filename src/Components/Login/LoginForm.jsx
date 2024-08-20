@@ -29,7 +29,6 @@ export default function SignIn() {
       // Dispatch the login action with email and password
       const res=await dispatch(loginAuthActions(values.email, values.password));
       if(res.accessToken){
-        toast.success('تم تسجيل الدخول بنجاح');
         navigate('/'); // Redirect to the desired route after login
         localStorage.setItem("token",res.accessToken)
         localStorage.setItem("userId",res.user._id)

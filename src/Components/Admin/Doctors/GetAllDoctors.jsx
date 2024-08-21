@@ -32,13 +32,13 @@ import { fetchDeleSingleDoctor } from '../../../redux/Actions/deleteSindleDoctor
 export default function GetAllDoctors() {
     const dispatch = useDispatch();
     const { doctors, status, error ,totalPages, currentPage } = useSelector((state) => state.all_doctors?.doctors);
-console.log("totalPages",totalPages)
     // Step 1: Add filter state
     const [nameFilter, setNameFilter] = useState('');
     const [specialtyFilter, setSpecialtyFilter] = useState('');
     const [degreeFilter, setDegreeFilter] = useState('');
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
+    
     useEffect(() => {
         setLoading(true); 
         dispatch(fetchAllDoctor(page)).finally(() => {
@@ -229,7 +229,7 @@ console.log("totalPages",totalPages)
                 }}
             >
                 <Pagination
-                    count={totalPages}
+                    count={filteredDoctors?.length < 10 ? 1 :totalPages}
                     page={page}
                     onChange={handlePageChange}
                     color="primary"

@@ -180,7 +180,7 @@ export default function GetAllNurses() {
             </TableContainer>
             <Stack spacing={2} mt={2} alignItems="center">
                 <Pagination
-                    count={totalPages}
+                    count={filteredNurses?.length < 10 ? 1 :totalPages}
                     page={page}
                     onChange={handlePageChange}
                     color="primary"

@@ -76,7 +76,13 @@ export const imageMap = {
     translatedTime: `${hour} ${period}`,
   };
 };
-
+export const consvertToArName=(name)=>{
+  if(name === "medical"){
+    return "معمل طبي"
+  }else{
+    return "مركز أشعة"
+  }
+}
 export function convertToArabicNumerals(number="") {
   // Define Arabic numeral mapping
   const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];

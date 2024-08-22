@@ -229,7 +229,7 @@ export default function GetAllDoctors() {
                 }}
             >
                 <Pagination
-                    count={filteredDoctors?.length < 10 ? 1 :totalPages}
+                    count={totalPages}
                     page={page}
                     onChange={handlePageChange}
                     color="primary"

@@ -24,6 +24,8 @@ import adminDashboardTotalNursingReducer from './reducers/adminDashboardTotalNur
 import adminDashboardTotalMedicalReducer from './reducers/adminDashboardTotalMedicalReducer';
 import getAllDoctorReducer from './reducers/getAllDoctorReducer';
 import getAllNursingReducer from './reducers/getAllNursingReducer';
+import getAllMedicalReducer from './reducers/getAllMedicalReducer';
+import getAllPharamcyReducer from './reducers/getAllPharamcyReducer';
 
 
 export const store = configureStore({
@@ -50,6 +52,8 @@ export const store = configureStore({
     admin_nursing:adminDashboardTotalNursingReducer,
     admin_medical:adminDashboardTotalMedicalReducer,
     all_doctors:getAllDoctorReducer,
-    all_nursing_data:getAllNursingReducer
+    all_nursing_data:getAllNursingReducer,
+    all_medicalLab:getAllMedicalReducer,
+    all_pharamcy:getAllPharamcyReducer
   },
 });

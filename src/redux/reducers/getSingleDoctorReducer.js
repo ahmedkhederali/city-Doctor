@@ -16,6 +16,7 @@ import {
         return {
           ...state,
           status: 'loading',
+          doctor:{}
         };
       case FETCH_SINGLE_DOCTOR_SUCCESS:
         return {

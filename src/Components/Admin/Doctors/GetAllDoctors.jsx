@@ -26,6 +26,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { convertDecimalToArabicNumerals, convertToArabicNumerals } from '../../../Common/Helper/helper';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import { fetchDeleSingleDoctor } from '../../../redux/Actions/deleteSindleDoctor';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -38,7 +39,7 @@ export default function GetAllDoctors() {
     const [degreeFilter, setDegreeFilter] = useState('');
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
-    
+    const navigate = useNavigate();
     useEffect(() => {
         setLoading(true); 
         dispatch(fetchAllDoctor(page)).finally(() => {
@@ -114,6 +115,10 @@ export default function GetAllDoctors() {
             }
         });
     };
+    const handleEdit = (doctor) => {
+        // Navigate to the edit page with the doctor's ID
+        navigate(`/edit-doctor/${doctor._id}`);
+      };
     return (
         <Box>
             {/* Step 4: Create filter inputs */}
@@ -205,7 +210,7 @@ export default function GetAllDoctors() {
                                 <TableCell align="center">{convertDecimalToArabicNumerals(doctor.rating)}</TableCell>
 
                                 <TableCell align="center" sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                    <IconButton color="primary" aria-label="edit doctor">
+                                    <IconButton color="primary" aria-label="edit doctor" onClick={() => handleEdit(doctor)}>
                                         <EditIcon />
                                     </IconButton>
                                     <IconButton color="secondary" aria-label="delete doctor" onClick={() => handleDelete(doctor)}>

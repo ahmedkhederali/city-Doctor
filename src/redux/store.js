@@ -26,11 +26,15 @@ import getAllDoctorReducer from './reducers/getAllDoctorReducer';
 import getAllNursingReducer from './reducers/getAllNursingReducer';
 import getAllMedicalReducer from './reducers/getAllMedicalReducer';
 import getAllPharamcyReducer from './reducers/getAllPharamcyReducer';
+import createNewDoctorReducer from './reducers/createNewDoctorReducer';
+import uploadImageDoctorReducer from './reducers/uploadImageDoctorReducer';
+import degreesReducer from './reducers/degreesReducer';
 
 
 export const store = configureStore({
   reducer: {
     yourFeature: specialtiesReducer,
+    degrees:degreesReducer,
     doctor_specfic:doctorSpecialtiesReducer,
     singlr_doc:singleDoctorReducer,
     single_comments:singleDoctorCommentsReducer,
@@ -54,6 +58,8 @@ export const store = configureStore({
     all_doctors:getAllDoctorReducer,
     all_nursing_data:getAllNursingReducer,
     all_medicalLab:getAllMedicalReducer,
-    all_pharamcy:getAllPharamcyReducer
+    all_pharamcy:getAllPharamcyReducer,
+    create_new_doctor:createNewDoctorReducer,
+    image_upload:uploadImageDoctorReducer,
   },
 });

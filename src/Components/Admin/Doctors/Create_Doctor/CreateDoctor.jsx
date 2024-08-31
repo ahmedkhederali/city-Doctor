@@ -52,7 +52,7 @@ const CreateDoctorForm = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [images, setImages] = useState(false);
   const isMobile = useMediaQuery('(max-width:600px)');
-  const { doctor:doctor_edit, status, error } = useSelector((state) => state.singlr_doc);
+  const { doctor: doctor_edit, status, error } = useSelector((state) => state.singlr_doc);
   const { items, loading: specialtiesLoading } = useSelector((state) => state.yourFeature);
   const { degrees, loading: status_degree, error_degree } = useSelector((state) => state.degrees);
   const { doctor, Status, commentError } = useSelector((state) => state.create_new_doctor);
@@ -67,8 +67,6 @@ const CreateDoctorForm = () => {
       toast.error(`${error?.payload?.response?.data?.msg}`);
     }
   }, [status, error]);
-  
- 
   useEffect(() => {
     dispatch(fetchSpecialties());
     dispatch(fetchDegrees());
@@ -85,16 +83,16 @@ const CreateDoctorForm = () => {
     }
   }, [dispatch, id]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setImages(doctor_img);
-  },[doctor_img])
+  }, [doctor_img])
 
-useEffect(()=>{
-   if(doctor_edit){
-    setDoctorData(doctor_edit);
-    setImages(doctor_edit.doctor_img);
-   }
-  },[doctor_edit])
+  useEffect(() => {
+    if (doctor_edit) {
+      setDoctorData(doctor_edit);
+      setImages(doctor_edit.doctor_img);
+    }
+  }, [doctor_edit])
 
   const handleChange = (e) => {
     setDoctorData({ ...doctorData, [e.target.name]: e.target.value });
@@ -296,7 +294,7 @@ useEffect(()=>{
                 </div>
               ) : (
                 <div id="file_img" style={styleUpload}>
-                  <img src={ images ? images.url : ""} alt="" />
+                  <img src={images ? images.url : ""} alt="" />
                   <span onClick={handleDestroy}>X</span>
                 </div>
               )}
@@ -352,7 +350,6 @@ useEffect(()=>{
             />
           </Grid>
 
-          {/* Specialties  */}
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel id="specialties-label">تخصصات</InputLabel>
@@ -360,8 +357,11 @@ useEffect(()=>{
                 labelId="specialties-label"
                 label="تخصصات"
                 name="specialties"
-                value={editMode ? doctorData?.specialties?._id
-                   : doctorData?.specialties}
+                value={
+                  editMode && doctorData?.specialties?._id
+                    ? doctorData.specialties._id
+                    : (doctorData?.specialties || '') // Fallback to empty string if undefined
+                }
                 onChange={handleChange}
               >
                 {specialtiesLoading ? (
@@ -376,15 +376,20 @@ useEffect(()=>{
               </Select>
             </FormControl>
           </Grid>
-           {/* Degree */}
-           <Grid item xs={12} sm={6}>
+          {/* Degree */}
+          <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <InputLabel id="degree-label">الدرجة العلمية</InputLabel>
               <Select
                 labelId="degree-label"
                 label="الدرجة العلمية"
                 name="degree"
-                value={editMode ?doctorData?.degree?._id : doctorData.degree}
+                value={
+                  editMode && doctorData?.degree?._id
+                    ? doctorData.degree._id
+                    : (doctorData?.degree || '') // Fallback to empty string if undefined
+                }
+              
                 onChange={handleChange}
               >
                 {status_degree ? (
@@ -399,7 +404,6 @@ useEffect(()=>{
               </Select>
             </FormControl>
           </Grid>
-       
 
           {/* Location */}
           <Grid item xs={12}>
@@ -447,7 +451,7 @@ useEffect(()=>{
                 labelId="sex-label"
                 label="النوع"
                 name="sex"
-                value={doctorData.sex}
+                value={doctorData?.sex || ''}
                 onChange={handleChange}
               >
                 <MenuItem value="Male">ذكر</MenuItem>
@@ -459,7 +463,7 @@ useEffect(()=>{
           {/* Time for Works */}
           <Grid item xs={12}>
             <Typography variant="h6">مواعيد العمل</Typography>
-            {doctorData?.time_for_works?.length >0  && doctorData?.time_for_works.map((work, index) => (
+            {doctorData?.time_for_works?.length > 0 && doctorData?.time_for_works.map((work, index) => (
               <Grid
                 container
                 spacing={2}
@@ -488,7 +492,7 @@ useEffect(()=>{
                     }}
                     // value={work.start_time}
                     value={convertTo24Hour(work.start_time)}
-                  onChange={(e) => handleTimeChange(index, { target: { name: 'start_time', value: convertTo12Hour(e.target.value) } })}
+                    onChange={(e) => handleTimeChange(index, { target: { name: 'start_time', value: convertTo12Hour(e.target.value) } })}
                   />
                 </Grid>
                 <Grid item xs={12} sm={3}>
@@ -502,7 +506,7 @@ useEffect(()=>{
                       shrink: true,
                     }}
                     value={convertTo24Hour(work.end_time)}
-                  onChange={(e) => handleTimeChange(index, { target: { name: 'end_time', value: convertTo12Hour(e.target.value) } })}
+                    onChange={(e) => handleTimeChange(index, { target: { name: 'end_time', value: convertTo12Hour(e.target.value) } })}
                   />
                 </Grid>
                 <Grid
@@ -534,12 +538,12 @@ useEffect(()=>{
             </Button>
           </Grid>
 
-          {/* Submit Button */}   
+          {/* Submit Button */}
           <Grid item xs={12}>
             <Button type="submit" variant="contained" color="primary" fullWidth>
-{
-  editMode ? " تعديل حساب الطبيب" : "  حساب الطبيب"
-}
+              {
+                editMode ? " تعديل حساب الطبيب" : "  حساب الطبيب"
+              }
             </Button>
           </Grid>
         </Grid>

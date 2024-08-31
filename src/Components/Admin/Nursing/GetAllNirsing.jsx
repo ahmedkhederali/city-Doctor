@@ -26,9 +26,11 @@ import Swal from 'sweetalert2';
 import { fetchAllNursing } from '../../../redux/Actions/getAllNursing';
 import { convertToArabicNumerals } from '../../../Common/Helper/helper';
 import { fetchDeleSingleNursing } from '../../../redux/Actions/deleteSindleNursing';
+import { useNavigate } from 'react-router-dom';
 
 export default function GetAllNurses() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { nurses, status, error, totalPages, currentPage } = useSelector((state) => state.all_nursing_data);
     
     const [nameFilter, setNameFilter] = useState('');
@@ -102,7 +104,10 @@ export default function GetAllNurses() {
     const handlePageChange = (event, value) => {
         setPage(value);
     };
-
+    const handleEdit = (nurseing) => {
+        // Navigate to the edit page with the nurseing's ID
+        navigate(`/edit-nurses/${nurseing._id}`);
+      };
     return (
         <Box>
             <Grid container spacing={2} mb={2}>
@@ -166,7 +171,7 @@ export default function GetAllNurses() {
                                 <TableCell align="center" sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{nurse.work_place}</TableCell>
                                 <TableCell align="center" sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{nurse.degree}</TableCell>
                                 <TableCell align="center" sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                    <IconButton color="primary" aria-label="edit" component="label">
+                                    <IconButton color="primary" aria-label="edit" component="label" onClick={() => handleEdit(nurse)}>
                                         <EditIcon />
                                     </IconButton>
                                     <IconButton color="error" aria-label="delete" onClick={() => handleDelete(nurse)}>

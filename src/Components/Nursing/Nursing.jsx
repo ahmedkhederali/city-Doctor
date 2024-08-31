@@ -46,7 +46,8 @@ const Nursing = () => {
   const [genderFilter, setGenderFilter] = useState(""); // State for gender filter
   const [page,setPage]=useState(1)
 
-  const { nursingData } = useSelector((state) => state.all_nursing);
+  const { nursingData , totalPages
+, currentPage  } = useSelector((state) => state.all_nursing);
   const status = useSelector((state) => state.all_nursing.status);
   const error = useSelector((state) => state.all_nursing.error);
 
@@ -71,7 +72,6 @@ const Nursing = () => {
       genderFilter === "" || nursingPerson.sex === genderFilter
     )
   : [];
-  console.log("nursingData", nursingData);
   const handleRating = (ratings) => {
     return ratings?.length ? calculateAverageRating(ratings) : 0;
   };
@@ -265,8 +265,8 @@ const Nursing = () => {
       </Grid>
       <Box mt={2} display="flex" justifyContent="center">
         <Pagination 
-          count={nursingData?.totalPages} 
-          page={nursingData?.currentPage} 
+          count={totalPages} 
+          page={currentPage} 
           onChange={handlePageChange} 
           color="primary" 
         />

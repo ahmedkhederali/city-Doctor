@@ -16,6 +16,7 @@ import {
         return {
           ...state,
           status: 'loading',
+          nrsing: {}
         };
       case FETCH_SINGLE_NURSING_SUCCESS:
         return {

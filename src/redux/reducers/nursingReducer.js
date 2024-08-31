@@ -8,6 +8,8 @@ import {
     nursingData: [],
     status: 'idle',
     error: null,
+    totalPages:1,
+    currentPage:1
   };
   
   const nursingReducer = (state = initialState, action) => {
@@ -30,6 +32,9 @@ import {
           ...state,
           status: 'succeeded',
           nursingData: action.payload?.nurses,
+          totalPages:action.payload?.totalPages,
+          currentPage:action.payload?.currentPage
+
         };
       case NURSING_FAILURE:
         return {

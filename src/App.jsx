@@ -21,6 +21,7 @@ import GetAllMedical from './Components/Admin/MedicalLabs/GetAllMedical';
 import GetAllNirsing from './Components/Admin/Nursing/GetAllNirsing';
 import GetAllPharamcy from './Components/Admin/Pharmacy/GetAllPharamcy';
 import CreateDoctor from './Components/Admin/Doctors/Create_Doctor/CreateDoctor';
+import CreateNursing from './Components/Admin/Nursing/create_nursing/CreateNursing';
 const App = () => {
   return (
     <Router>
@@ -69,6 +70,16 @@ const App = () => {
            <Route 
             path="/edit-doctor/:id" 
             element={<ProtectedRoute element={<CreateDoctor />} allowedRoles={['admin']} />} 
+            exact 
+          />
+           <Route 
+            path="/add-nurse" 
+            element={<ProtectedRoute element={<CreateNursing />} allowedRoles={['admin']} />} 
+            exact 
+          />
+          <Route 
+            path="/edit-nurses/:id" 
+            element={<ProtectedRoute element={<CreateNursing />} allowedRoles={['admin']} />} 
             exact 
           />
         </Route>

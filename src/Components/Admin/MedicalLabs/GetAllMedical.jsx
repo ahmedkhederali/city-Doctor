@@ -26,6 +26,7 @@ import Swal from 'sweetalert2'; // Import SweetAlert2
 import { fetchAllMedicalLac } from '../../../redux/Actions/getAllMedicalLab';
 import { fetchDeleSingleMedicalLabs } from '../../../redux/Actions/deleteSindleMedicalLabs';
 import { consvertToArName, convertDecimalToArabicNumerals, convertToArabicNumerals } from '../../../Common/Helper/helper';
+import { useNavigate } from 'react-router-dom';
 
 export default function GetAllMedical() {
     const dispatch = useDispatch();
@@ -35,6 +36,7 @@ export default function GetAllMedical() {
     const [medicalTypeFilter, setMedicalTypeFilter] = useState('');
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setLoading(true); 
@@ -106,7 +108,10 @@ export default function GetAllMedical() {
             }
         });
     };
-
+    const handleEdit = (lab) => {
+        // Navigate to the edit page with the lab's ID
+        navigate(`/edit-labs/${lab._id}`);
+      };
     return (
         <Box>
             {/* Filter inputs */}
@@ -178,7 +183,7 @@ export default function GetAllMedical() {
                                 <TableCell align="center" sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{convertDecimalToArabicNumerals(lab.ratings?.reduce((acc, cur) => acc + cur.rating, 0) / lab.ratings.length || 0)}</TableCell>
 
                                 <TableCell align="center" sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                    <IconButton color="primary" aria-label="edit lab">
+                                    <IconButton color="primary" aria-label="edit lab" onClick={() => handleEdit(lab)}>
                                         <EditIcon />
                                     </IconButton>
                                     <IconButton color="secondary" aria-label="delete lab" onClick={() => handleDelete(lab)}>

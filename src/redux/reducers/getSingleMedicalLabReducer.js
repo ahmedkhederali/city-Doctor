@@ -5,7 +5,7 @@ import {
   } from '../Actions/getSindleMedicalLab';
   
   const initialState = {
-    medicalLabsData: {},
+    medicalLabsData: false,
     status: 'idle',
     error: null,
   };

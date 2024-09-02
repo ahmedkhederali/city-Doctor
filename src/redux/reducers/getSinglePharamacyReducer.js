@@ -5,7 +5,7 @@ import {
   } from '../Actions/getSindlePharamacy';
   
   const initialState = {
-    pharamacy: {},
+    pharamacy: false,
     status: 'idle',
     error: null,
   };

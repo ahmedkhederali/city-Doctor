@@ -155,8 +155,8 @@ export default function CreateNursing() {
         }
     };
     const styleUpload = {
-        display: Object.keys(editMode ? nursing.image : doctor_img).length > 0  ? "block" : "none",
-    };
+        display: images ? "block" : "none",
+      };
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {

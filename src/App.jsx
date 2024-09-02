@@ -23,6 +23,7 @@ import GetAllPharamcy from './Components/Admin/Pharmacy/GetAllPharamcy';
 import CreateDoctor from './Components/Admin/Doctors/Create_Doctor/CreateDoctor';
 import CreateNursing from './Components/Admin/Nursing/create_nursing/CreateNursing';
 import CreateMedicalLab from './Components/Admin/MedicalLabs/create_medicalLabs/CreateMedicalLab';
+import CreatePharamcy from './Components/Admin/Pharmacy/create_pharamcy/CreatePharamcy';
 const App = () => {
   return (
     <Router>
@@ -91,6 +92,16 @@ const App = () => {
            <Route 
             path="/edit-labs/:id" 
             element={<ProtectedRoute element={<CreateMedicalLab />} allowedRoles={['admin']} />} 
+            exact 
+          />
+             <Route 
+            path="/add-pharmacy" 
+            element={<ProtectedRoute element={<CreatePharamcy />} allowedRoles={['admin']} />} 
+            exact 
+          />
+           <Route 
+            path="/edit-pharmacy/:id" 
+            element={<ProtectedRoute element={<CreatePharamcy />} allowedRoles={['admin']} />} 
             exact 
           />
         </Route>

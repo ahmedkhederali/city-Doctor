@@ -31,6 +31,7 @@ import uploadImageDoctorReducer from './reducers/uploadImageDoctorReducer';
 import degreesReducer from './reducers/degreesReducer';
 import createNewNursingReducer from './reducers/createNewNursingReducer';
 import createNewMedicalLabReducer from './reducers/createNewMedicalLabReducer';
+import createNewPharamcybReducer from './reducers/createNewPharamcyReducer';
 
 
 export const store = configureStore({
@@ -64,6 +65,7 @@ export const store = configureStore({
     create_new_doctor:createNewDoctorReducer,
     create_new_nursing:createNewNursingReducer,
     create_new_medicalLab:createNewMedicalLabReducer,
+    create_new_pharamcy:createNewPharamcybReducer,
     image_upload:uploadImageDoctorReducer,
   },
 });

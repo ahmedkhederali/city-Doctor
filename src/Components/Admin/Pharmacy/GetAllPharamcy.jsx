@@ -26,6 +26,7 @@ import Swal from 'sweetalert2'; // Import SweetAlert2
 import { consvertToArName, convertDecimalToArabicNumerals, convertToArabicNumerals } from '../../../Common/Helper/helper';
 import { fetchDeleSinglePharamcy } from '../../../redux/Actions/deleteSindlePharamcy';
 import { fetchAllPharamcy } from '../../../redux/Actions/getAllPharmacy';
+import { useNavigate } from 'react-router-dom';
 
 export default function GetAllPharamcy() {
     const dispatch = useDispatch();
@@ -33,6 +34,8 @@ export default function GetAllPharamcy() {
     const [nameFilter, setNameFilter] = useState('');
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
+    const navigate = useNavigate();
+
     useEffect(() => {
         setLoading(true); 
         dispatch(fetchAllPharamcy(page)).finally(() => {
@@ -100,7 +103,10 @@ export default function GetAllPharamcy() {
             }
         });
     };
-
+    const handleEdit = (lab) => {
+        // Navigate to the edit page with the lab's ID
+        navigate(`/edit-pharmacy/${lab._id}`);
+      };
     return (
         <Box>
             {/* Filter inputs */}
@@ -148,7 +154,7 @@ export default function GetAllPharamcy() {
                                 <TableCell align="center" sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{convertDecimalToArabicNumerals(lab.ratings?.reduce((acc, cur) => acc + cur.rating, 0) / lab.ratings.length || 0)}</TableCell>
 
                                 <TableCell align="center" sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                    <IconButton color="primary" aria-label="edit lab">
+                                    <IconButton color="primary" aria-label="edit lab" onClick={() => handleEdit(lab)}>
                                         <EditIcon />
                                     </IconButton>
                                     <IconButton color="secondary" aria-label="delete lab" onClick={() => handleDelete(lab)}>

@@ -10,6 +10,8 @@ import image9 from "../../assets/albwaw3ia.jpg";
 import image10 from "../../assets/btnaa.jpg";
 import image12 from "../../assets/haknmahgri.jpg";
 import image11 from "../../assets/esbatmla3b.webp";
+import image13 from "../../assets/oyon.jpg";
+
 import { jwtDecode } from "jwt-decode";
 
 //Decode the Token and Get User Role
@@ -44,6 +46,7 @@ export const imageMap = {
     9:image10,
     10:image11,
     11:image12,
+    12:image13
 
   };
 

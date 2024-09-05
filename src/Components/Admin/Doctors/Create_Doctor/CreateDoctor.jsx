@@ -209,7 +209,7 @@ const CreateDoctorForm = () => {
         time_for_works: (doctorData.time_for_works),
       };
 
-      if (doctor_img) {
+      if (doctor_img && !editMode) {
         payload.doctor_img = doctor_img;
       }
 

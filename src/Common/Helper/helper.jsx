@@ -72,7 +72,7 @@ export const imageMap = {
   let [hour, period] = time.split(" ");
   hour = hour.replace(/\d/g, (d) => "٠١٢٣٤٥٦٧٨٩"[d]);
 
-  period = period === "PM" ? "مساءا" : "صباحا";
+  period = period === "م" ? "مساءا" : "صباحا";
 
   return {
     translatedDay: daysMap[day],

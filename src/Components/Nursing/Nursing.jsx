@@ -159,8 +159,10 @@ const Nursing = () => {
                         alt={nursingPerson.name}
                         style={{
                           width: "100%",
-                          height: "auto",
+                          height: "200px",
                           borderRadius: "8px",
+                          objectFit: "cover",
+                          objectPosition: "top" // Aligns the image so the top part is shown
                         }}
                       />
                     </Box>

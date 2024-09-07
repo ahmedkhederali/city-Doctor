@@ -99,12 +99,15 @@ const CreateDoctorForm = () => {
   };
 
   const handleTimeChange = (index, e) => {
+    // Get the current time_for_works array and map through it
     const newTimeForWorks = doctorData.time_for_works.map((work, workIndex) => {
       if (index === workIndex) {
+        // Update only the specific work entry that matches the index
         return { ...work, [e.target.name]: e.target.value };
       }
       return work;
     });
+    // Update the doctorData state with the new time_for_works array
     setDoctorData({ ...doctorData, time_for_works: newTimeForWorks });
   };
 
@@ -269,6 +272,7 @@ const CreateDoctorForm = () => {
       </Box>
     );
   }
+  const daysOfWeek =['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   return (
     <Box
       sx={{
@@ -471,14 +475,20 @@ const CreateDoctorForm = () => {
                 sx={{ marginBottom: 2 }}
               >
                 <Grid item xs={12} sm={3}>
-                  <TextField
-                    fullWidth
-                    label="اليوم"
-                    name="day"
-                    variant="outlined"
-                    value={work.day}
-                    onChange={(e) => handleTimeChange(index, e)}
-                  />
+                <Select
+                  fullWidth
+                  label="اليوم"
+                  name="day" // This makes sure the 'day' field is updated
+                  variant="outlined"
+                  value={work.day} // The current value of the day field
+                  onChange={(e) => handleTimeChange(index, e)} // Calls handleTimeChange when the value is selected
+                >
+                  {daysOfWeek.map((day) => (
+                    <MenuItem key={day} value={day}>
+                      {day}
+                    </MenuItem>
+                  ))}
+                </Select>
                 </Grid>
                 <Grid item xs={12} sm={3}>
                   <TextField

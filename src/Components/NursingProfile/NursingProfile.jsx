@@ -317,7 +317,7 @@ const NursingProfile = () => {
             </Box>
             <Box sx={{ mt: 4 }}>
               <Typography variant="h6" gutterBottom>
-                المهمات
+                المهام
               </Typography>
               {nrsing?.functionality?.map((specialty) => (
                 <Box

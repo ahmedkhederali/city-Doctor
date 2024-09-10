@@ -78,7 +78,7 @@ export default function GetAllDoctors() {
 
     // Step 2: Extract unique specialties and degrees
     const uniqueSpecialties = [...new Set(doctors.map((doctor) => doctor.specialties.specialty_name))];
-    const uniqueDegrees = [...new Set(doctors.map((doctor) => doctor.degree.degree_name))];
+    const uniqueDegrees = [...new Set(doctors.map((doctor) => doctor?.degree?.degree_name))];
 
     // Step 3: Apply filters
     const filteredDoctors = doctors.filter((doctor) => {
@@ -206,7 +206,7 @@ export default function GetAllDoctors() {
                                 </TableCell>
 
                                 <TableCell align="center">{convertToArabicNumerals(doctor.phone)}</TableCell>
-                                <TableCell align="center">{doctor.degree.degree_name}</TableCell>
+                                <TableCell align="center">{doctor?.degree?.degree_name}</TableCell>
                                 <TableCell align="center">{convertDecimalToArabicNumerals(doctor.rating)}</TableCell>
 
                                 <TableCell align="center" sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>

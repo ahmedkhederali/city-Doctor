@@ -164,7 +164,7 @@ export default function CreateNursing() {
                 ...nursing,
             };
 
-            if (doctor_img) {
+            if (doctor_img && !editMode) {
                 payload.image = doctor_img;
             }
 

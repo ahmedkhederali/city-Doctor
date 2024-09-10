@@ -60,7 +60,7 @@ const MedicalLabProfile = () => {
   const [visibleComments, setVisibleComments] = useState(5);
   const [openModal, setOpenModal] = useState(false);
   const [rating, setRating] = useState(0);
-  const [visibleTests, setVisibleTests] = useState(1); // Initially show 5 items
+  const [visibleTests, setVisibleTests] = useState(5); // Initially show 5 items
   const [searchQuery, setSearchQuery] = useState(''); // For search functionality
   // to get MedicalLab Data
   useEffect(() => {

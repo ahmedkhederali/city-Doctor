@@ -201,7 +201,7 @@ const MedicalLabProfile = () => {
           alignItems:'center'
          }}
       >
-        <h1> معمل {medicalLabsData.name}</h1>
+        <h1> {medicalLabsData.medicallab_type === 'central' ? 'مركز' :'معمل'} {medicalLabsData.name}</h1>
         <Typography
           variant="h6"
           sx={{
@@ -217,7 +217,7 @@ const MedicalLabProfile = () => {
           }}
           onClick={handleOpenModal}
         >
-          تقييم المعمل
+          تقييم {medicalLabsData.medicallab_type === 'central' ? 'المركز' :'المعمل'}
         </Typography>
       </Box>
       <Card>
@@ -294,7 +294,7 @@ const MedicalLabProfile = () => {
       {/* Medical Tests Section */}
       <Box sx={{ mt: 4 }}>
       <Typography variant="h6" gutterBottom>
-        التحاليل الطبية المتاحة
+      {medicalLabsData.medicallab_type === 'central' ? ' الاشاعات المتاحة' :'التحاليل الطبية المتاحة'}
       </Typography>
 
       {/* Search Field */}

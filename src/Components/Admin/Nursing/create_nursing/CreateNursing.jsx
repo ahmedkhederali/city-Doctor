@@ -140,10 +140,10 @@ export default function CreateNursing() {
                 toast.error(`غير مسموح لك`);
                 return;
             }
-            dispatch(fetchDestroyImageDoctor(editMode ? doctorData?.doctor_img?.public_id : doctor_img?.public_id)).then(() => {
+            dispatch(fetchDestroyImageDoctor(editMode ? nursing?.image?.public_id : doctor_img?.public_id)).then(() => {
                 setLoading(false);
                 setImages(false);
-                setnursing({ ...doctorData, image: null });
+                setnursing({ ...nursing, image: null });
             }).catch((err) => {
                 toast.error(err.msg);
                 removeTokenWhneStatus401(err.status);
@@ -164,7 +164,7 @@ export default function CreateNursing() {
                 ...nursing,
             };
 
-            if (doctor_img && !editMode) {
+            if (doctor_img ) {
                 payload.image = doctor_img;
             }
 

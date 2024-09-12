@@ -37,7 +37,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSingleDoctor } from "../../redux/Actions/getSindleDoctor";
 import { fetchSingleDoctorComments } from "../../redux/Actions/getSindleDoctorComments";
-import { removeTokenWhneStatus401, translateDayAndTime } from "../../Common/Helper/helper";
+import { convertToArabicNumerals, removeTokenWhneStatus401, translateDayAndTime } from "../../Common/Helper/helper";
 import { createComment } from "../../redux/Actions/createComment";
 import { AppContext } from "../../contextApi/AppContext";
 import Comment from "../../Common/Comment/Comments";
@@ -269,7 +269,7 @@ const DoctorProfile = () => {
                   <FaMoneyBillWave />
                 </IconButton>
                 <Typography variant="body2" sx={{ ml: 1 }}>
-                  السعر: {doctor.detection_price} جنيه
+                  السعر: {convertToArabicNumerals(doctor.detection_price)} جنيه
                 </Typography>
               </Box>
               <Box

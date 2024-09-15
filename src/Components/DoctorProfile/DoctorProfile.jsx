@@ -283,7 +283,7 @@ const DoctorProfile = () => {
                   <FaPhone />
                 </IconButton>
                 <Typography variant="body2" sx={{ ml: 1 }}>
-                  {doctor.phone}
+                  {convertToArabicNumerals(doctor.phone)}
                 </Typography>
               </Box>
             </CardContent>
